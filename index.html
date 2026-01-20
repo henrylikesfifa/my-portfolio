@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>faux.moni — Portfolio</title>
+    <meta name="description" content="Designer portfolio landing page recreated with a sharp, squared-off aesthetic and dynamic case studies.">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Scripts -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        :root { 
+            --font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif; 
+        }
+        body { 
+            font-family: var(--font-sans); 
+            background-color: white;
+            overflow-x: hidden;
+        }
+        
+        .font-mono-custom { 
+            font-family: 'ui-monospace', 'SFMono-Regular', Menlo, Monaco, Consolas, monospace; 
+        }
+
+        html { scroll-behavior: smooth; }
+
+        #canvas-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .hero-title {
+            line-height: 0.85;
+            letter-spacing: -0.05em;
+        }
+
+        /* Custom Scrollbar - Squared */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #000; }
+
+        .page-transition {
+            transition: opacity 0.4s ease-in-out, transform 0.4s ease-in-out;
+        }
+        
+        .hidden-page {
+            display: none;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .active-page {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Square Bubble Tags */
+        .tag-bubble {
+            display: inline-block;
+            padding: 4px 8px;
+            border: 1px solid #e5e5e5;
+            font-size: 9px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-right: 4px;
+            margin-bottom: 4px;
+        }
+
+        /* Timeline Styles */
+        .timeline-step {
+            position: relative;
+            padding-left: 32px;
+            padding-bottom: 40px;
+        }
+        .timeline-step::before {
+            content: '';
+            position: absolute;
+            left: 7px;
+            top: 24px;
+            bottom: 0;
+            width: 1px;
+            background: #000;
+        }
+        .timeline-step:last-child::before {
+            display: none;
+        }
+        .timeline-dot {
+            position: absolute;
+            left: 0;
+            top: 4px;
+            width: 15px;
+            height: 15px;
+            background: #fff;
+            border: 1px solid #000;
+            z-index: 1;
+        }
+
+        /* Interactive Asset Preview Styles */
+        #asset-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(255,255,255,0.8);
+            backdrop-filter: blur(8px);
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        #asset-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        #preview-img {
+            max-width: 450px; 
+            max-height: 70vh;
+            width: 90%;
+            border: 1px solid #000;
+            box-shadow: 15px 15px 0px 0px rgba(0,0,0,1);
+            transform: scale(0.95);
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        #asset-overlay.active #preview-img {
+            transform: scale(1);
+        }
+
+        /* Fidelity Magnifier Box Animation */
+        .fidelity-detail {
+            box-shadow: 12px 12px 0px 0px rgba(0,0,0,1);
+            transition: all 0.3s ease;
+        }
+        .fidelity-detail:hover {
+            transform: translate(-4px, -4px);
+            box-shadow: 16px 16px 0px 0px rgba(0,0,0,1);
+        }
+    </style>
+</head>
+<body class="text-neutral-900 antialiased selection:bg-neutral-900 selection:text-white">
+
+    <!-- 3D Canvas Background -->
+    <div id="canvas-container"></div>
+
+    <!-- Interactive Asset Overlay -->
+    <div id="asset-overlay" onmouseleave="closeAssetPreview()">
+        <img id="preview-img" src="" alt="Preview">
+        <div class="absolute bottom-12 left-1/2 -translate-x-1/2 text-center pointer-events-none">
+            <p id="preview-label" class="text-[10px] font-bold uppercase tracking-[0.5em] mb-2"></p>
+            <p class="text-[8px] uppercase tracking-widest text-neutral-400">Exit focus to close</p>
+        </div>
+    </div>
+
+    <!-- ALWAYS VISIBLE NAVIGATION RAIL -->
+    <aside class="hidden lg:flex fixed left-8 top-1/2 -translate-y-1/2 z-[100] flex-col gap-4">
+        <div class="flex flex-col bg-white border border-black p-1 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+            <a href="#" class="p-3 hover:bg-black hover:text-white transition-colors text-black border-b border-neutral-100 last:border-0"><i data-lucide="home" class="w-4 h-4"></i></a>
+            <a href="#work" class="p-3 hover:bg-black hover:text-white transition-colors text-black border-b border-neutral-100 last:border-0"><i data-lucide="layout" class="w-4 h-4"></i></a>
+            <a href="#about" class="p-3 hover:bg-black hover:text-white transition-colors text-black border-b border-neutral-100 last:border-0"><i data-lucide="user" class="w-4 h-4"></i></a>
+            <a href="#contact" class="p-3 hover:bg-black hover:text-white transition-colors text-black"><i data-lucide="mail" class="w-4 h-4"></i></a>
+        </div>
+    </aside>
+
+    <!-- MAIN LANDING PAGE -->
+    <div id="home-page" class="page-transition active-page">
+        <!-- Hero Header -->
+        <header class="relative w-full h-screen flex flex-col justify-between p-6 sm:p-12 z-10 pointer-events-none">
+            <div class="flex justify-between items-start pointer-events-auto w-full max-w-7xl mx-auto">
+                <div class="text-xl font-bold tracking-tighter text-black uppercase">faux.moni</div>
+                <nav class="hidden sm:flex gap-10 text-[10px] font-bold text-neutral-400 uppercase tracking-[0.3em]">
+                    <a href="#about" class="hover:text-black transition-colors">about</a>
+                    <a href="#work" class="hover:text-black transition-colors">work</a>
+                    <a href="#studio" class="hover:text-black transition-colors">studio</a>
+                    <a href="#contact" class="hover:text-black transition-colors">contact</a>
+                </nav>
+            </div>
+
+            <div class="flex flex-col md:flex-row justify-between items-end gap-12 pointer-events-auto w-full max-w-7xl mx-auto mb-4">
+                <div class="max-w-xs space-y-8 mb-4 md:mb-0">
+                    <p class="text-sm leading-relaxed text-neutral-500 font-medium border-l-2 border-black pl-4">
+                        building things in berlin. design, code, and whatever else feels right.
+                    </p>
+                    <button onclick="document.getElementById('main-content').scrollIntoView()" class="group flex items-center gap-2 text-[10px] font-bold tracking-[0.2em] uppercase border border-black p-4 hover:bg-black hover:text-white transition-all cursor-pointer">
+                        View Projects <i data-lucide="arrow-down" class="w-3 h-3 group-hover:translate-y-1 transition-transform"></i>
+                    </button>
+                </div>
+
+                <div class="text-right">
+                    <h1 class="hero-title text-6xl md:text-8xl lg:text-9xl font-semibold text-black">
+                        <span class="block uppercase">The Future</span>
+                        <span class="block text-neutral-200 uppercase">Of Design</span>
+                    </h1>
+                    <p class="text-xl md:text-2xl text-neutral-400 font-medium mt-4 tracking-tight font-mono-custom italic">EST. 2003</p>
+                </div>
+            </div>
+        </header>
+
+        <main id="main-content" class="relative z-20 bg-white">
+            <!-- About Section -->
+            <section id="about" class="px-6 py-24 sm:px-12 border-t border-black">
+                <div class="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-24 items-stretch">
+                    
+                    <div class="lg:col-span-5 flex flex-col justify-between order-2 lg:order-1">
+                        <div class="relative bg-neutral-100 border border-black aspect-[4/5] overflow-hidden">
+                            <img src="https://i.imgur.com/Knm26si.jpeg" alt="Portrait" class="w-full h-full object-cover object-[50%_20%]">
+                        </div>
+
+                        <div class="mt-8 flex justify-center">
+                            <a href="mailto:hello@fauxmoni.com" class="group relative flex w-1/2 items-center justify-between px-6 py-5 bg-black text-white border border-black transition-all hover:bg-neutral-900 overflow-hidden">
+                                <div class="flex flex-col gap-0">
+                                    <span class="text-[8px] font-bold uppercase tracking-[0.2em] text-neutral-400 leading-none mb-1">Status</span>
+                                    <span class="text-sm font-bold uppercase tracking-tight">Hit me up</span>
+                                </div>
+                                <i data-lucide="arrow-up-right" class="w-4 h-4 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform"></i>
+                                <div class="absolute inset-0 bg-neutral-800 translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="lg:col-span-7 flex flex-col justify-between order-1 lg:order-2">
+                        <div class="space-y-12">
+                            <div class="space-y-6">
+                                <div class="inline-block px-3 py-1 border border-black text-[10px] font-bold uppercase tracking-widest text-black">Profile — 01</div>
+                                <h2 class="text-5xl md:text-7xl font-semibold tracking-tighter uppercase leading-[0.9]">Design Engineer</h2>
+                                <p class="text-xl text-neutral-500 leading-relaxed font-mono-custom max-w-xl">
+                                    I design and build digital products that actually work. I handle the UI systems and then write the code to make it real. Fast, clean, and cool.
+                                </p>
+                            </div>
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 border-t border-black pt-12 pb-1">
+                                <div>
+                                    <h3 class="text-[10px] font-bold uppercase text-neutral-400 tracking-[0.2em] mb-6">Stuff I do</h3>
+                                    <ul class="space-y-3 font-mono-custom text-sm font-medium">
+                                        <li class="flex items-center gap-3"><div class="w-2 h-2 bg-black"></div> UI/UX Design</li>
+                                        <li class="flex items-center gap-3"><div class="w-2 h-2 bg-black"></div> Front-End Dev</li>
+                                        <li class="flex items-center gap-3"><div class="w-2 h-2 bg-black"></div> Design Systems</li>
+                                        <li class="flex items-center gap-3"><div class="w-2 h-2 bg-black"></div> Visual Identity</li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <h3 class="text-[10px] font-bold uppercase text-neutral-400 tracking-[0.2em] mb-6">Focus</h3>
+                                    <ul class="space-y-3 font-mono-custom text-sm font-medium">
+                                        <li class="flex items-center gap-3"><div class="w-2 h-2 border border-black"></div> Tech & SaaS</li>
+                                        <li class="flex items-center gap-3"><div class="w-2 h-2 border border-black"></div> Creative Agencies</li>
+                                        <li class="flex items-center gap-3"><div class="w-2 h-2 border border-black"></div> FinTech</li>
+                                        <li class="flex items-center gap-3"><div class="w-2 h-2 border border-black"></div> Luxury Brands</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Works List -->
+            <section id="work" class="px-6 py-24 sm:px-12 border-t border-black">
+                <div class="max-w-6xl mx-auto space-y-48">
+                    <!-- Project 1 (Crude Routes) -->
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-0 border border-black group">
+                        <div class="p-8 md:p-16 space-y-8 border-b lg:border-b-0 lg:border-r border-black flex flex-col justify-center">
+                            <div class="space-y-3">
+                                <p class="text-[10px] font-bold text-neutral-400 uppercase tracking-widest font-mono-custom">JAN 2025 — PROJECT</p>
+                                <h3 class="text-4xl md:text-5xl font-semibold tracking-tighter uppercase">Crude Routes</h3>
+                                <p class="text-sm font-bold uppercase tracking-widest text-neutral-900 font-mono-custom">Hybrid Supply Chains</p>
+                            </div>
+                            <p class="text-neutral-500 font-mono-custom">Merging direct industrial manufacturing with AI synthesis to build a brand at lightning speed.</p>
+                            
+                            <div class="pt-4">
+                                <div class="flex flex-wrap gap-1 mb-6">
+                                    <span class="tag-bubble">ALIBABA MFG</span>
+                                    <span class="tag-bubble">PHOTOSHOP</span>
+                                    <span class="tag-bubble">ILLUSTRATOR</span>
+                                    <span class="tag-bubble">AI CAMPAIGN</span>
+                                </div>
+                                <button onclick="showCaseStudy('lumina')" class="inline-flex items-center w-fit gap-4 px-6 py-3 bg-black text-white text-[10px] font-bold uppercase tracking-widest hover:bg-neutral-800 transition-colors">
+                                    View Project <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="overflow-hidden bg-neutral-100">
+                            <img src="https://i.imgur.com/loZbRhd.jpeg" alt="Crude Routes" class="w-full h-full object-cover object-top aspect-square">
+                        </div>
+                    </div>
+
+                    <!-- Project 2 -->
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-0 border border-black group">
+                        <div class="overflow-hidden bg-neutral-100 order-2 lg:order-1">
+                            <img src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=1200&auto=format&fit=crop&q=80" alt="Work" class="w-full h-full object-cover aspect-square">
+                        </div>
+                        <div class="p-8 md:p-16 space-y-8 border-b lg:border-b-0 order-1 lg:order-2 flex flex-col justify-center">
+                            <div class="space-y-2">
+                                <p class="text-[10px] font-bold text-neutral-400 uppercase tracking-widest font-mono-custom">NOV 2023 — JAN 2024</p>
+                                <h3 class="text-4xl md:text-5xl font-semibold tracking-tighter uppercase">Aura Wearables</h3>
+                            </div>
+                            <p class="text-neutral-500 font-mono-custom">Boutique shop for high-end health tech.</p>
+                            
+                            <div class="pt-4">
+                                <div class="flex flex-wrap gap-1 mb-6">
+                                    <span class="tag-bubble">ADOBE CC</span>
+                                    <span class="tag-bubble">SHOPIFY</span>
+                                    <span class="tag-bubble">BLENDER</span>
+                                </div>
+                                <button onclick="showCaseStudy('aura')" class="inline-flex items-center w-fit gap-4 px-6 py-3 bg-black text-white text-[10px] font-bold uppercase tracking-widest hover:bg-neutral-800 transition-colors">
+                                    View Case <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- CASE STUDY PAGE TEMPLATE -->
+    <div id="case-study-page" class="page-transition hidden-page fixed inset-0 z-50 bg-white overflow-y-auto">
+        <nav class="sticky top-0 z-50 p-6 bg-white/80 backdrop-blur-md border-b border-black flex justify-between items-center">
+            <button onclick="hideCaseStudy()" class="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest hover:translate-x-[-4px] transition-transform">
+                <i data-lucide="arrow-left" class="w-4 h-4"></i> Back
+            </button>
+            <div id="cs-nav-title" class="text-[10px] font-bold uppercase tracking-[0.3em]">Project</div>
+            <div class="w-20"></div>
+        </nav>
+
+        <article class="max-w-7xl mx-auto px-6 py-20 sm:px-12 pb-0">
+            <header class="space-y-8 mb-20">
+                <div id="cs-tag" class="inline-block px-3 py-1 border border-black text-[10px] font-bold uppercase tracking-widest">Case Study</div>
+                <div class="space-y-4">
+                    <h1 id="cs-title" class="text-6xl md:text-9xl font-semibold tracking-tighter uppercase leading-none">Title</h1>
+                    <p id="cs-subheading" class="text-lg md:text-2xl font-mono-custom text-neutral-400 tracking-tight"></p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-12 pt-12 border-t border-black">
+                    <div>
+                        <h4 class="text-[10px] font-bold uppercase text-neutral-400 mb-2">Role</h4>
+                        <p id="cs-role" class="font-mono-custom text-sm font-medium">Lead Designer</p>
+                    </div>
+                    <div>
+                        <h4 class="text-[10px] font-bold uppercase text-neutral-400 mb-2">Year</h4>
+                        <p id="cs-year" class="font-mono-custom text-sm font-medium">2024</p>
+                    </div>
+                    <div>
+                        <h4 class="text-[10px] font-bold uppercase text-neutral-400 mb-2">Focus</h4>
+                        <p id="cs-focus" class="font-mono-custom text-sm font-medium">UI / UX / WebGL</p>
+                    </div>
+                </div>
+            </header>
+
+            <div class="border border-black bg-neutral-100 aspect-video mb-24 overflow-hidden">
+                <img id="cs-hero-img" src="" alt="Hero" class="w-full h-full object-cover object-top">
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-16 mb-24 items-start">
+                <div class="lg:col-span-5 space-y-12">
+                    <div>
+                        <h2 class="text-3xl font-bold uppercase border-b border-black pb-4 mb-8 tracking-tighter">The Process</h2>
+                        <p id="cs-brief" class="font-mono-custom text-neutral-500 text-lg leading-relaxed"></p>
+                    </div>
+
+                    <!-- Support Image -->
+                    <div id="cs-support-image-container" class="hidden">
+                         <div class="border border-black bg-neutral-100 aspect-[3/4] overflow-hidden shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
+                            <img id="cs-support-img" src="" alt="Process Support" class="w-full h-full object-cover">
+                        </div>
+                    </div>
+
+                    <div id="cs-timeline-container" class="hidden pt-8 border-t border-black">
+                        <h3 class="text-xs font-black uppercase tracking-[0.3em] text-neutral-900 mb-8">Production Pipeline</h3>
+                        <div id="cs-timeline-list" class="flex flex-col">
+                            <!-- Steps injected via JS -->
+                        </div>
+                    </div>
+                    
+                    <div id="cs-assets-container" class="hidden">
+                        <div class="flex flex-col gap-2 mb-8">
+                            <h3 class="text-xs font-black uppercase tracking-[0.3em] text-neutral-900" id="cs-assets-title">Raw Materials</h3>
+                        </div>
+                        <div id="cs-assets-grid" class="grid grid-cols-2 gap-3 mb-12">
+                            <!-- Injected assets -->
+                        </div>
+
+                        <!-- Consolidated: Atmospheric Brief box where the extra image was -->
+                        <div id="cs-pub-brief-section" class="hidden mt-16">
+                            <div class="p-8 border border-black bg-neutral-50 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
+                                <div class="flex items-center gap-4 mb-6">
+                                    <div class="w-8 h-[1px] bg-black"></div>
+                                    <h3 class="text-xs font-black uppercase tracking-[0.4em]">Atmospheric Brief</h3>
+                                </div>
+                                <p class="text-xl font-medium leading-tight mb-4">"Technical Grit"</p>
+                                <p class="font-mono-custom text-sm text-neutral-500 leading-relaxed mb-6">
+                                    The visual direction for the campaign was centered on placing a highly technical, synthetic product into the grit and warmth of a traditional pub setting.
+                                </p>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="text-[8px] font-bold border border-black px-2 py-1 uppercase">Low Light</span>
+                                    <span class="text-[8px] font-bold border border-black px-2 py-1 uppercase">Warm Textures</span>
+                                </div>
+                            </div>
+                            <div class="mt-4 flex items-center justify-between">
+                                <span class="text-[9px] font-bold uppercase tracking-[0.3em] text-neutral-400">Spec Ref // 010-B</span>
+                                <div class="w-12 h-[1px] bg-neutral-200"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-7 flex flex-col">
+                    <h2 class="text-3xl font-bold uppercase border-b border-black pb-4 mb-4 tracking-tighter">The Result</h2>
+                    <p id="cs-solution" class="text-2xl md:text-3xl font-medium leading-tight mb-16 italic tracking-tight"></p>
+                    
+                    <!-- FIDELITY SHOWCASE -->
+                    <div id="cs-fidelity-showcase" class="hidden mb-24 space-y-12">
+                        <div class="flex items-center justify-between border-b-2 border-black pb-4">
+                            <h3 class="text-xs font-bold uppercase tracking-[0.5em] text-neutral-900">Real Fidelity Check</h3>
+                        </div>
+                        
+                        <div class="relative w-full max-w-xl mx-auto">
+                            <div class="border border-black bg-neutral-100 aspect-[3/4] overflow-hidden">
+                                <img id="cs-fidelity-main" src="" alt="Main Campaign Shoot" class="w-full h-full object-cover">
+                            </div>
+                            
+                            <div class="absolute -bottom-6 -right-6 md:-right-12 w-1/2 max-w-[240px] fidelity-detail border-2 border-black bg-white z-10 overflow-hidden aspect-square flex flex-col">
+                                <div class="flex-1 overflow-hidden bg-neutral-100">
+                                    <img id="cs-fidelity-detail" src="" alt="Fidelity Detail" class="w-full h-full object-cover scale-[1.1]">
+                                </div>
+                                <div class="bg-black p-3">
+                                    <span class="text-[8px] font-black text-white uppercase tracking-widest">1:1 Zoom</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="cs-outcomes-container" class="hidden mb-24 space-y-16">
+                        <div id="cs-outcomes-list" class="flex flex-col gap-20">
+                            <!-- Injected -->
+                        </div>
+                    </div>
+
+                    <!-- Outcome Image (Bike) -->
+                    <div id="cs-outcome-image-container" class="hidden mb-12">
+                        <div class="border border-black bg-neutral-100 aspect-[4/3] overflow-hidden">
+                            <img id="cs-outcome-img" src="" alt="Outcome Visual" class="w-full h-full object-cover">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Playful Gallery Section (Varied heights, tighter bottom margin) -->
+            <div id="cs-gallery" class="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12 pb-16">
+                <!-- Gallery injected -->
+            </div>
+
+            <!-- Footer Section (Reduced top padding) -->
+            <div class="py-8 flex justify-center border-t border-black">
+                <button onclick="hideCaseStudy()" class="group flex flex-col items-center gap-4">
+                    <span class="text-[10px] font-bold uppercase tracking-[0.4em] text-neutral-400">Done</span>
+                    <span class="text-4xl font-bold uppercase group-hover:italic transition-all">Back Home</span>
+                    <i data-lucide="arrow-down" class="w-8 h-8 mt-4"></i>
+                </button>
+            </div>
+        </article>
+    </div>
+
+    <script>
+        const caseStudies = {
+            lumina: {
+                title: "Crude Routes",
+                subheading: "Tactile vs. Synthetic.",
+                tag: "Project — 01",
+                year: "2025",
+                role: "Art Director / Designer",
+                focus: "Global Sourcing / AI",
+                brief: "This was an experiment in building a brand at speed without the usual overhead. I started with a bunch of digital moodboards and technical specs, then scoured Alibaba to find a manufacturer for the physical prototype. Once the sample was in my hands and verified, I built out the campaign world using visual synthesis.",
+                solution: "The result is a hybrid brand identity where a physical product lives in a completely synthetic playground. We cut the production timeline by 80%.",
+                hero: "https://i.imgur.com/loZbRhd.jpeg",
+                supportImg: "https://i.imgur.com/tVE1KMh.jpeg", 
+                outcomeImg: "https://i.imgur.com/wgpl6sq.jpeg",
+                showPubBrief: true, 
+                fidelity: {
+                    main: "https://i.imgur.com/IuGXoU5.jpeg", 
+                    zoom: "https://i.imgur.com/3EBAUG0.png"   
+                },
+                assets: {
+                    title: "Factory Pipeline",
+                    items: [
+                        { url: "https://i.imgur.com/omwK7XG.png", label: "Front" },
+                        { url: "https://i.imgur.com/TxFbNcu.jpeg", label: "Three Quarter" },
+                        { url: "https://i.imgur.com/sYZPWF6.jpeg", label: "Back" },
+                        { url: "https://i.imgur.com/Ph54zyd.jpeg", label: "Side" }
+                    ]
+                },
+                timeline: [
+                    { title: "The Spark", desc: "Visual Research & Vibe-check" },
+                    { title: "Drafting", desc: "Technical Vector Specs" },
+                    { title: "The Wrap", desc: "Synthetic Campaign Generation" }
+                ],
+                outcomes: [
+                    { title: "Real Fidelity", desc: "The physical sample and the synthetic campaign assets match 1:1." },
+                    { title: "Hyper Speed", desc: "I can pivot the entire campaign look in a single afternoon." },
+                    { title: "Future Ready", desc: "The modular nature of the production pipeline allows for infinite iterations without re-shooting." }
+                ],
+                gallery: [
+                    { url: "https://i.imgur.com/J4denA0.jpeg", style: "aspect-[3/4] md:translate-y-12" },
+                    { url: "https://i.imgur.com/rqJxlPl.jpeg", style: "aspect-square md:scale-110 z-10" },
+                    { url: "https://i.imgur.com/HlmQXvO.jpeg", style: "aspect-[3/5] md:-translate-y-8" }
+                ]
+            },
+            aura: {
+                title: "Aura Wearables",
+                subheading: "Editorial focus for biometric tech.",
+                tag: "Project — 02",
+                year: "2023",
+                role: "Lead",
+                focus: "Shopify / 3D",
+                brief: "Aura required a repositioning of their health tracker from a functional biometric tool to a luxury accessory.",
+                solution: "Utilized minimalist typography and atmospheric product rendering.",
+                hero: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=1600&q=80",
+                gallery: [
+                    { url: "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1200&q=80", style: "aspect-square" },
+                    { url: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=1200&q=80", style: "aspect-square" },
+                    { url: "https://images.unsplash.com/photo-1551488831-00ddcb6c6bd3?w=1200&q=80", style: "aspect-square" }
+                ]
+            }
+        };
+
+        function openAssetPreview(url, label) {
+            const overlay = document.getElementById('asset-overlay');
+            const previewImg = document.getElementById('preview-img');
+            const previewLabel = document.getElementById('preview-label');
+            previewImg.src = url;
+            previewLabel.innerText = label;
+            overlay.classList.add('active');
+        }
+
+        function closeAssetPreview() {
+            document.getElementById('asset-overlay').classList.remove('active');
+        }
+
+        function showCaseStudy(id) {
+            const data = caseStudies[id];
+            if (!data) return;
+
+            document.getElementById('cs-title').innerText = data.title;
+            document.getElementById('cs-subheading').innerText = data.subheading || "";
+            document.getElementById('cs-tag').innerText = data.tag;
+            document.getElementById('cs-year').innerText = data.year;
+            document.getElementById('cs-role').innerText = data.role;
+            document.getElementById('cs-focus').innerText = data.focus;
+            document.getElementById('cs-brief').innerText = data.brief;
+            document.getElementById('cs-solution').innerText = data.solution;
+            document.getElementById('cs-hero-img').src = data.hero;
+            document.getElementById('cs-nav-title').innerText = data.title;
+
+            const pubBrief = document.getElementById('cs-pub-brief-section');
+            pubBrief.classList.toggle('hidden', !data.showPubBrief);
+
+            const supportImgContainer = document.getElementById('cs-support-image-container');
+            if (data.supportImg) {
+                supportImgContainer.classList.remove('hidden');
+                document.getElementById('cs-support-img').src = data.supportImg;
+            } else { supportImgContainer.classList.add('hidden'); }
+
+            const outcomeImgContainer = document.getElementById('cs-outcome-image-container');
+            if (data.outcomeImg) {
+                outcomeImgContainer.classList.remove('hidden');
+                document.getElementById('cs-outcome-img').src = data.outcomeImg;
+            } else { outcomeImgContainer.classList.add('hidden'); }
+
+            const fidelityShowcase = document.getElementById('cs-fidelity-showcase');
+            if (data.fidelity) {
+                fidelityShowcase.classList.remove('hidden');
+                document.getElementById('cs-fidelity-main').src = data.fidelity.main;
+                document.getElementById('cs-fidelity-detail').src = data.fidelity.zoom;
+            } else { fidelityShowcase.classList.add('hidden'); }
+
+            const assetsContainer = document.getElementById('cs-assets-container');
+            const assetsGrid = document.getElementById('cs-assets-grid');
+            if (data.assets) {
+                assetsContainer.classList.remove('hidden');
+                document.getElementById('cs-assets-title').innerText = data.assets.title;
+                assetsGrid.innerHTML = data.assets.items.map((asset) => `
+                    <div class="group relative aspect-square border border-black overflow-hidden bg-neutral-100" 
+                         onmouseenter="openAssetPreview('${asset.url}', '${asset.label}')">
+                        <img src="${asset.url}" class="w-full h-full object-cover">
+                    </div>
+                `).join('');
+            } else { assetsContainer.classList.add('hidden'); }
+
+            const timelineList = document.getElementById('cs-timeline-list');
+            if (data.timeline) {
+                document.getElementById('cs-timeline-container').classList.remove('hidden');
+                timelineList.innerHTML = data.timeline.map(step => `
+                    <div class="timeline-step">
+                        <div class="timeline-dot"></div>
+                        <h4 class="text-xl font-bold uppercase tracking-tight">${step.title}</h4>
+                        <p class="text-sm text-neutral-400 font-mono-custom uppercase tracking-widest mt-1">${step.desc}</p>
+                    </div>
+                `).join('');
+            } else { document.getElementById('cs-timeline-container').classList.add('hidden'); }
+
+            const outcomesList = document.getElementById('cs-outcomes-list');
+            if (data.outcomes) {
+                document.getElementById('cs-outcomes-container').classList.remove('hidden');
+                outcomesList.innerHTML = data.outcomes.map((item, i) => `
+                    <div class="flex flex-col md:flex-row gap-8 group">
+                        <div class="md:w-20 shrink-0">
+                             <span class="text-4xl font-bold font-mono-custom text-black/10 group-hover:text-black transition-colors">0${i+1}</span>
+                        </div>
+                        <div class="space-y-4 flex-1">
+                            <h4 class="text-2xl font-bold uppercase">${item.title}</h4>
+                            <p class="text-lg font-mono-custom text-neutral-500 max-w-2xl">${item.desc}</p>
+                        </div>
+                    </div>
+                `).join('');
+            } else { document.getElementById('cs-outcomes-container').classList.add('hidden'); }
+
+            // Gallery with Layout Logic
+            document.getElementById('cs-gallery').innerHTML = data.gallery.map(imgObj => `
+                <div class="border border-black overflow-hidden bg-neutral-100 transition-all duration-700 ${imgObj.style}">
+                    <img src="${imgObj.url}" class="w-full h-full object-cover">
+                </div>
+            `).join('');
+
+            const home = document.getElementById('home-page');
+            const cs = document.getElementById('case-study-page');
+            home.classList.replace('active-page', 'hidden-page');
+            setTimeout(() => {
+                home.style.display = 'none';
+                cs.style.display = 'block';
+                cs.scrollTop = 0; 
+                setTimeout(() => {
+                    cs.classList.replace('hidden-page', 'active-page');
+                    lucide.createIcons();
+                }, 50);
+            }, 400);
+        }
+
+        function hideCaseStudy() {
+            const home = document.getElementById('home-page');
+            const cs = document.getElementById('case-study-page');
+            cs.classList.replace('active-page', 'hidden-page');
+            setTimeout(() => {
+                cs.style.display = 'none';
+                home.style.display = 'block';
+                setTimeout(() => {
+                    home.classList.replace('hidden-page', 'active-page');
+                }, 50);
+            }, 400);
+        }
+
+        lucide.createIcons();
+
+        const initThree = () => {
+            const container = document.getElementById('canvas-container');
+            const scene = new THREE.Scene();
+            scene.background = new THREE.Color(0xffffff);
+            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.z = 25;
+            const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(window.devicePixelRatio);
+            container.appendChild(renderer.domElement);
+            const geometry = new THREE.BoxGeometry(15, 15, 15);
+            const material = new THREE.MeshBasicMaterial({ color: 0x000000, wireframe: true, transparent: true, opacity: 0.05 });
+            const cube = new THREE.Mesh(geometry, material);
+            scene.add(cube);
+            let mouseX = 0, mouseY = 0;
+            window.addEventListener('mousemove', (e) => {
+                mouseX = (e.clientX - window.innerWidth/2) / 100;
+                mouseY = (e.clientY - window.innerHeight/2) / 100;
+            });
+            const animate = () => {
+                requestAnimationFrame(animate);
+                cube.rotation.x += 0.001;
+                cube.rotation.y += 0.0015;
+                cube.position.x += (mouseX - cube.position.x) * 0.05;
+                cube.position.y += (-mouseY - cube.position.y) * 0.05;
+                renderer.render(scene, camera);
+            }
+            animate();
+            window.addEventListener('resize', () => {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            });
+        }
+        window.onload = initThree;
+    </script>
+</body>
+</html>
