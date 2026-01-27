@@ -6,12 +6,10 @@
     <title>faux.moni — Portfolio</title>
     <meta name="description" content="Designer portfolio landing page recreated with a sharp, squared-off aesthetic and dynamic case studies.">
     
-    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     
-    <!-- Scripts -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -47,7 +45,7 @@
             letter-spacing: -0.05em;
         }
 
-        /* Custom Scrollbar - Squared */
+        /* Standard Global Scrollbar */
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #000; }
@@ -114,34 +112,48 @@
         #asset-overlay {
             position: fixed;
             inset: 0;
-            background: rgba(255,255,255,0.8);
-            backdrop-filter: blur(8px);
-            z-index: 100;
+            background: rgba(255,255,255,0.92);
+            backdrop-filter: blur(12px);
+            z-index: 200; 
             display: flex;
             align-items: center;
             justify-content: center;
             opacity: 0;
             pointer-events: none;
-            transition: opacity 0.3s ease;
+            transition: opacity color 0.3s ease;
         }
         #asset-overlay.active {
             opacity: 1;
             pointer-events: auto;
         }
         #preview-img {
-            max-width: 450px; 
-            max-height: 70vh;
-            width: 90%;
-            border: 1px solid #000;
-            box-shadow: 15px 15px 0px 0px rgba(0,0,0,1);
+            max-width: 100%; 
+            max-height: none;
+            width: 100%;
+            border: none;
+            box-shadow: none;
             transform: scale(0.95);
             transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            object-fit: contain;
+            background: #fff;
         }
-        #asset-overlay.active #preview-img {
+        .scrollable-preview {
+            overflow-y: auto;
+            max-height: 85vh;
+            border: 1px solid #000;
+            box-shadow: 20px 20px 0px 0px rgba(0,0,0,1);
+            background: #fff;
+            width: 90%;
+            max-width: 500px;
+        }
+        .scrollable-preview::-webkit-scrollbar { width: 4px; }
+        .scrollable-preview::-webkit-scrollbar-thumb { background: #000; }
+
+        #asset-overlay.active #preview-img, 
+        #asset-overlay.active .scrollable-preview {
             transform: scale(1);
         }
 
-        /* Fidelity Magnifier Box Animation */
         .fidelity-detail {
             box-shadow: 12px 12px 0px 0px rgba(0,0,0,1);
             transition: all 0.3s ease;
@@ -150,43 +162,74 @@
             transform: translate(-4px, -4px);
             box-shadow: 16px 16px 0px 0px rgba(0,0,0,1);
         }
+
+        /* Instagram Carousel Specifics */
+        .ig-carousel-inner {
+            display: flex;
+            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .ig-slide {
+            min-width: 100%;
+            height: 100%;
+        }
+        
+        /* Embedded In-Page Scrollers for EDMs */
+        .embedded-edm-scroller {
+            overflow-y: auto;
+            border: 1px solid #000;
+            background: #f9f9f9;
+            box-shadow: 8px 8px 0px 0px rgba(0,0,0,1);
+            display: block;
+            width: 100%;
+        }
+        .embedded-edm-scroller::-webkit-scrollbar { 
+            width: 8px; 
+        }
+        .embedded-edm-scroller::-webkit-scrollbar-track { 
+            background: #000000;
+        }
+        .embedded-edm-scroller::-webkit-scrollbar-thumb { 
+            background: #ffffff;
+            border: 1px solid #000000;
+        }
     </style>
 </head>
 <body class="text-neutral-900 antialiased selection:bg-neutral-900 selection:text-white">
 
-    <!-- 3D Canvas Background -->
     <div id="canvas-container"></div>
 
-    <!-- Interactive Asset Overlay -->
-    <div id="asset-overlay" onmouseleave="closeAssetPreview()">
-        <img id="preview-img" src="" alt="Preview">
+    <div id="asset-overlay">
+        <button onclick="closeAssetPreview()" class="fixed top-8 right-8 p-3 bg-white border border-black hover:bg-black hover:text-white transition-all z-[210] shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] group" title="Close Preview">
+            <i data-lucide="x" class="w-6 h-6"></i>
+        </button>
+
+        <button onclick="navigateAsset(-1)" id="asset-prev" class="fixed left-4 md:left-12 top-1/2 -translate-y-1/2 p-3 bg-white border border-black hover:bg-black hover:text-white transition-all z-[210] shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+            <i data-lucide="chevron-left" class="w-6 h-6"></i>
+        </button>
+        
+        <div class="scrollable-preview" id="preview-scroll-container">
+            <img id="preview-img" src="" alt="Preview" class="w-full h-auto block">
+        </div>
+
+        <button onclick="navigateAsset(1)" id="asset-next" class="fixed right-4 md:right-12 top-1/2 -translate-y-1/2 p-3 bg-white border border-black hover:bg-black hover:text-white transition-all z-[210] shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+            <i data-lucide="chevron-right" class="w-6 h-6"></i>
+        </button>
+
         <div class="absolute bottom-12 left-1/2 -translate-x-1/2 text-center pointer-events-none">
             <p id="preview-label" class="text-[10px] font-bold uppercase tracking-[0.5em] mb-2"></p>
-            <p class="text-[8px] uppercase tracking-widest text-neutral-400">Exit focus to close</p>
+            <p class="text-[8px] uppercase tracking-widest text-neutral-400">Esc or click 'X' to close</p>
         </div>
     </div>
 
-    <!-- ALWAYS VISIBLE NAVIGATION RAIL -->
-    <aside class="hidden lg:flex fixed left-8 top-1/2 -translate-y-1/2 z-[100] flex-col gap-4">
-        <div class="flex flex-col bg-white border border-black p-1 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
-            <a href="#" class="p-3 hover:bg-black hover:text-white transition-colors text-black border-b border-neutral-100 last:border-0"><i data-lucide="home" class="w-4 h-4"></i></a>
-            <a href="#work" class="p-3 hover:bg-black hover:text-white transition-colors text-black border-b border-neutral-100 last:border-0"><i data-lucide="layout" class="w-4 h-4"></i></a>
-            <a href="#about" class="p-3 hover:bg-black hover:text-white transition-colors text-black border-b border-neutral-100 last:border-0"><i data-lucide="user" class="w-4 h-4"></i></a>
-            <a href="#contact" class="p-3 hover:bg-black hover:text-white transition-colors text-black"><i data-lucide="mail" class="w-4 h-4"></i></a>
-        </div>
-    </aside>
-
-    <!-- MAIN LANDING PAGE -->
     <div id="home-page" class="page-transition active-page">
-        <!-- Hero Header -->
         <header class="relative w-full h-screen flex flex-col justify-between p-6 sm:p-12 z-10 pointer-events-none">
             <div class="flex justify-between items-start pointer-events-auto w-full max-w-7xl mx-auto">
                 <div class="text-xl font-bold tracking-tighter text-black uppercase">faux.moni</div>
                 <nav class="hidden sm:flex gap-10 text-[10px] font-bold text-neutral-400 uppercase tracking-[0.3em]">
-                    <a href="#about" class="hover:text-black transition-colors">about</a>
-                    <a href="#work" class="hover:text-black transition-colors">work</a>
-                    <a href="#studio" class="hover:text-black transition-colors">studio</a>
-                    <a href="#contact" class="hover:text-black transition-colors">contact</a>
+                    <button onclick="navToSection('about')" class="hover:text-black transition-colors uppercase">about</button>
+                    <button onclick="navToSection('work')" class="hover:text-black transition-colors uppercase">work</button>
+                    <button onclick="navToSection('studio')" class="hover:text-black transition-colors uppercase">studio</button>
+                    <button onclick="navToSection('contact')" class="hover:text-black transition-colors uppercase">contact</button>
                 </nav>
             </div>
 
@@ -195,7 +238,7 @@
                     <p class="text-sm leading-relaxed text-neutral-500 font-medium border-l-2 border-black pl-4">
                         building things in berlin. design, code, and whatever else feels right.
                     </p>
-                    <button onclick="document.getElementById('main-content').scrollIntoView()" class="group flex items-center gap-2 text-[10px] font-bold tracking-[0.2em] uppercase border border-black p-4 hover:bg-black hover:text-white transition-all cursor-pointer">
+                    <button onclick="navToSection('work')" class="group flex items-center gap-2 text-[10px] font-bold tracking-[0.2em] uppercase border border-black p-4 hover:bg-black hover:text-white transition-all cursor-pointer">
                         View Projects <i data-lucide="arrow-down" class="w-3 h-3 group-hover:translate-y-1 transition-transform"></i>
                     </button>
                 </div>
@@ -211,15 +254,12 @@
         </header>
 
         <main id="main-content" class="relative z-20 bg-white">
-            <!-- About Section -->
-            <section id="about" class="px-6 py-24 sm:px-12 border-t border-black">
+            <section id="about" class="px-6 py-24 sm:px-12 border-t border-black scroll-mt-20">
                 <div class="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-24 items-stretch">
-                    
                     <div class="lg:col-span-5 flex flex-col justify-between order-2 lg:order-1">
                         <div class="relative bg-neutral-100 border border-black aspect-[4/5] overflow-hidden">
                             <img src="https://i.imgur.com/Knm26si.jpeg" alt="Portrait" class="w-full h-full object-cover object-[50%_20%]">
                         </div>
-
                         <div class="mt-8 flex justify-center">
                             <a href="mailto:hello@fauxmoni.com" class="group relative flex w-1/2 items-center justify-between px-6 py-5 bg-black text-white border border-black transition-all hover:bg-neutral-900 overflow-hidden">
                                 <div class="flex flex-col gap-0">
@@ -231,7 +271,6 @@
                             </a>
                         </div>
                     </div>
-
                     <div class="lg:col-span-7 flex flex-col justify-between order-1 lg:order-2">
                         <div class="space-y-12">
                             <div class="space-y-6">
@@ -241,7 +280,6 @@
                                     I design and build digital products that actually work. I handle the UI systems and then write the code to make it real. Fast, clean, and cool.
                                 </p>
                             </div>
-
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-12 border-t border-black pt-12 pb-1">
                                 <div>
                                     <h3 class="text-[10px] font-bold uppercase text-neutral-400 tracking-[0.2em] mb-6">Stuff I do</h3>
@@ -267,10 +305,54 @@
                 </div>
             </section>
 
-            <!-- Works List -->
-            <section id="work" class="px-6 py-24 sm:px-12 border-t border-black">
-                <div class="max-w-6xl mx-auto space-y-48">
-                    <!-- Project 1 (Crude Routes) -->
+            <section id="work" class="px-6 py-24 sm:px-12 border-t border-black scroll-mt-20">
+                <div class="max-w-6xl mx-auto space-y-24">
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-0 border border-black group">
+                        <div class="p-8 md:p-16 space-y-8 border-b lg:border-b-0 lg:border-r border-black flex flex-col justify-center">
+                            <div class="space-y-2">
+                                <p class="text-[10px] font-bold text-neutral-400 uppercase tracking-widest font-mono-custom">NOV 2023 — JAN 2024</p>
+                                <h3 class="text-4xl md:text-5xl font-semibold tracking-tighter uppercase">Utopia Goods</h3>
+                            </div>
+                            <p class="text-neutral-500 font-mono-custom">Heritage textile digital ecosystems and automated production.</p>
+                            <div class="pt-4">
+                                <div class="flex flex-wrap gap-1 mb-6">
+                                    <span class="tag-bubble">EDM SYSTEMS</span>
+                                    <span class="tag-bubble">WEAVY ENGINE</span>
+                                    <span class="tag-bubble">BRAND STORY</span>
+                                </div>
+                                <button onclick="showCaseStudy('aura')" class="inline-flex items-center w-fit gap-4 px-6 py-3 bg-black text-white text-[10px] font-bold uppercase tracking-widest hover:bg-neutral-800 transition-colors">
+                                    View Case <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="overflow-hidden bg-neutral-100">
+                            <img src="https://i.imgur.com/gwBrqKN.png" alt="Utopia Goods" class="w-full h-full object-cover aspect-square">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-0 border border-black group">
+                        <div class="overflow-hidden bg-neutral-100 order-2 lg:order-1">
+                            <img src="https://i.imgur.com/9frRN0E.jpeg" alt="Chrome Hearts Concept" class="w-full h-full object-cover aspect-square">
+                        </div>
+                        <div class="p-8 md:p-16 space-y-8 border-b lg:border-b-0 order-1 lg:order-2 flex flex-col justify-center">
+                            <div class="space-y-3">
+                                <p class="text-[10px] font-bold text-neutral-400 uppercase tracking-widest font-mono-custom">CONCEPT — 2025</p>
+                                <h3 class="text-4xl md:text-5xl font-semibold tracking-tighter uppercase">Chrome Hearts</h3>
+                                <p class="text-sm font-bold uppercase tracking-widest text-neutral-900 font-mono-custom">Content Art Direction</p>
+                            </div>
+                            <p class="text-neutral-500 font-mono-custom">A speculative content pipeline demonstrating how AI and advanced editing can scale luxury production from existing marketplace photos.</p>
+                            <div class="pt-4">
+                                <div class="flex flex-wrap gap-1 mb-6">
+                                    <span class="tag-bubble">AI ART DIRECTION</span>
+                                    <span class="tag-bubble">CONTENT SCALING</span>
+                                </div>
+                                <button onclick="showCaseStudy('chrome_hearts')" class="inline-flex items-center w-fit gap-4 px-6 py-3 bg-black text-white text-[10px] font-bold uppercase tracking-widest hover:bg-neutral-800 transition-colors">
+                                    View Concept <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-0 border border-black group">
                         <div class="p-8 md:p-16 space-y-8 border-b lg:border-b-0 lg:border-r border-black flex flex-col justify-center">
                             <div class="space-y-3">
@@ -279,7 +361,6 @@
                                 <p class="text-sm font-bold uppercase tracking-widest text-neutral-900 font-mono-custom">Hybrid Supply Chains</p>
                             </div>
                             <p class="text-neutral-500 font-mono-custom">Merging direct industrial manufacturing with AI synthesis to build a brand at lightning speed.</p>
-                            
                             <div class="pt-4">
                                 <div class="flex flex-wrap gap-1 mb-6">
                                     <span class="tag-bubble">ALIBABA MFG</span>
@@ -296,37 +377,23 @@
                             <img src="https://i.imgur.com/loZbRhd.jpeg" alt="Crude Routes" class="w-full h-full object-cover object-top aspect-square">
                         </div>
                     </div>
+                </div>
+            </section>
 
-                    <!-- Project 2 -->
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-0 border border-black group">
-                        <div class="overflow-hidden bg-neutral-100 order-2 lg:order-1">
-                            <img src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=1200&auto=format&fit=crop&q=80" alt="Work" class="w-full h-full object-cover aspect-square">
-                        </div>
-                        <div class="p-8 md:p-16 space-y-8 border-b lg:border-b-0 order-1 lg:order-2 flex flex-col justify-center">
-                            <div class="space-y-2">
-                                <p class="text-[10px] font-bold text-neutral-400 uppercase tracking-widest font-mono-custom">NOV 2023 — JAN 2024</p>
-                                <h3 class="text-4xl md:text-5xl font-semibold tracking-tighter uppercase">Aura Wearables</h3>
-                            </div>
-                            <p class="text-neutral-500 font-mono-custom">Boutique shop for high-end health tech.</p>
-                            
-                            <div class="pt-4">
-                                <div class="flex flex-wrap gap-1 mb-6">
-                                    <span class="tag-bubble">ADOBE CC</span>
-                                    <span class="tag-bubble">SHOPIFY</span>
-                                    <span class="tag-bubble">BLENDER</span>
-                                </div>
-                                <button onclick="showCaseStudy('aura')" class="inline-flex items-center w-fit gap-4 px-6 py-3 bg-black text-white text-[10px] font-bold uppercase tracking-widest hover:bg-neutral-800 transition-colors">
-                                    View Case <i data-lucide="arrow-right" class="w-4 h-4"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
+            <section id="studio" class="px-6 py-24 sm:px-12 border-t border-black scroll-mt-20">
+                <div class="max-w-6xl mx-auto py-20 text-center">
+                    <h2 class="text-3xl font-bold uppercase tracking-[0.4em] text-black/20">Studio Space</h2>
+                </div>
+            </section>
+
+            <section id="contact" class="px-6 py-24 sm:px-12 border-t border-black scroll-mt-20">
+                <div class="max-w-6xl mx-auto py-20 text-center">
+                    <h2 class="text-3xl font-bold uppercase tracking-[0.4em] text-black/20">Contact</h2>
                 </div>
             </section>
         </main>
     </div>
 
-    <!-- CASE STUDY PAGE TEMPLATE -->
     <div id="case-study-page" class="page-transition hidden-page fixed inset-0 z-50 bg-white overflow-y-auto">
         <nav class="sticky top-0 z-50 p-6 bg-white/80 backdrop-blur-md border-b border-black flex justify-between items-center">
             <button onclick="hideCaseStudy()" class="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest hover:translate-x-[-4px] transition-transform">
@@ -336,7 +403,7 @@
             <div class="w-20"></div>
         </nav>
 
-        <article class="max-w-7xl mx-auto px-6 py-20 sm:px-12 pb-0">
+        <article id="cs-article" class="max-w-7xl mx-auto px-6 py-20 sm:px-12 pb-0">
             <header class="space-y-8 mb-20">
                 <div id="cs-tag" class="inline-block px-3 py-1 border border-black text-[10px] font-bold uppercase tracking-widest">Case Study</div>
                 <div class="space-y-4">
@@ -359,18 +426,79 @@
                 </div>
             </header>
 
-            <div class="border border-black bg-neutral-100 aspect-video mb-24 overflow-hidden">
-                <img id="cs-hero-img" src="" alt="Hero" class="w-full h-full object-cover object-top">
+            <div id="cs-hero-container" class="mb-24">
+                <div class="border border-black bg-neutral-100 aspect-video overflow-hidden">
+                    <img id="cs-hero-img" src="" alt="Hero" class="w-full h-full object-cover object-top">
+                </div>
             </div>
 
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-16 mb-24 items-start">
-                <div class="lg:col-span-5 space-y-12">
+            <div id="cs-grid-layout" class="grid grid-cols-1 lg:grid-cols-12 gap-16 mb-24 items-start">
+                <div id="cs-left-col" class="lg:col-span-5 space-y-12">
                     <div>
-                        <h2 class="text-3xl font-bold uppercase border-b border-black pb-4 mb-8 tracking-tighter">The Process</h2>
-                        <p id="cs-brief" class="font-mono-custom text-neutral-500 text-lg leading-relaxed"></p>
+                        <h2 id="cs-process-title" class="text-3xl font-bold uppercase border-b border-black pb-4 mb-8 tracking-tighter">The Process</h2>
+                        <div id="cs-brief" class="font-mono-custom text-neutral-500 text-lg leading-relaxed"></div>
                     </div>
 
-                    <!-- Support Image -->
+                    <div id="cs-weavy-container" class="hidden space-y-6 pt-12 border-t border-black">
+                        <h3 class="text-xl font-bold uppercase tracking-tight">The Weavy System</h3>
+                        <p class="text-sm font-mono-custom text-neutral-500">To avoid costly reshoots, I engineered the "Weavy" system—a workflow that digitally composites new pillow designs into existing lifestyle photography with perfect fabric tension.</p>
+                        <div class="border border-black aspect-video bg-neutral-900 flex items-center justify-center group relative cursor-pointer">
+                            <div class="absolute inset-0 bg-neutral-100/10 group-hover:bg-neutral-100/20 transition-colors flex items-center justify-center">
+                                <i data-lucide="play" class="w-10 h-10 text-white opacity-80"></i>
+                            </div>
+                            <span class="text-[8px] font-bold text-white/50 uppercase tracking-widest absolute bottom-4">Workflow Walkthrough.mp4</span>
+                        </div>
+                    </div>
+
+                    <div id="cs-social-container" class="hidden space-y-6 pt-12 border-t border-black">
+                        <h3 class="text-xs font-black uppercase tracking-[0.4em]">Brand Journey Impact</h3>
+                        <p id="cs-social-brief" class="font-mono-custom text-sm text-neutral-500 mb-8"></p>
+                        
+                        <div class="max-w-md mx-auto border border-black bg-white shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] flex flex-col">
+                            <div class="p-3 border-b border-black flex items-center gap-3">
+                                <div class="w-8 h-8 rounded-full bg-neutral-100 border border-black overflow-hidden">
+                                    <img id="ig-profile-pic" src="" class="w-full h-full object-cover">
+                                </div>
+                                <div class="flex flex-col">
+                                    <span id="ig-username-top" class="text-[10px] font-bold leading-none">username</span>
+                                    <span class="text-[8px] text-neutral-400">Sydney, Australia</span>
+                                </div>
+                                <div class="ml-auto">
+                                    <i data-lucide="more-horizontal" class="w-4 h-4 text-neutral-400"></i>
+                                </div>
+                            </div>
+
+                            <div id="ig-aspect-container" class="relative overflow-hidden group aspect-square">
+                                <div id="ig-carousel" class="ig-carousel-inner h-full"></div>
+                                <button onclick="prevIgSlide()" class="absolute left-2 top-1/2 -translate-y-1/2 p-2 bg-white/80 border border-black opacity-0 group-hover:opacity-100 transition-opacity">
+                                    <i data-lucide="chevron-left" class="w-4 h-4"></i>
+                                </button>
+                                <button onclick="nextIgSlide()" class="absolute right-2 top-1/2 -translate-y-1/2 p-2 bg-white/80 border border-black opacity-0 group-hover:opacity-100 transition-opacity">
+                                    <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                                </button>
+                                <div class="absolute bottom-4 right-4 bg-black/60 text-white text-[8px] px-2 py-1 rounded-full font-bold" id="ig-counter">1/7</div>
+                            </div>
+
+                            <div class="p-4 space-y-3">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex gap-4">
+                                        <i data-lucide="heart" class="w-5 h-5 cursor-pointer hover:fill-red-500 transition-colors"></i>
+                                        <i data-lucide="message-circle" class="w-5 h-5 cursor-pointer"></i>
+                                        <i data-lucide="send" class="w-5 h-5 cursor-pointer"></i>
+                                    </div>
+                                    <i data-lucide="bookmark" id="ig-bookmark" onclick="this.classList.toggle('fill-black')" class="w-5 h-5 cursor-pointer"></i>
+                                </div>
+                                <div class="space-y-1">
+                                    <p id="ig-likes-text" class="text-xs font-bold tracking-tight">1,240 likes</p>
+                                    <p class="text-[10px] leading-relaxed">
+                                        <span id="ig-username-caption" class="font-bold mr-1">username</span> Scaling the heritage story.
+                                    </p>
+                                    <p id="ig-engagement-text" class="text-[10px] font-black text-blue-600 mt-2 tracking-wide">ENGAGEMENT UP 240%</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <div id="cs-support-image-container" class="hidden">
                          <div class="border border-black bg-neutral-100 aspect-[3/4] overflow-hidden shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
                             <img id="cs-support-img" src="" alt="Process Support" class="w-full h-full object-cover">
@@ -378,21 +506,16 @@
                     </div>
 
                     <div id="cs-timeline-container" class="hidden pt-8 border-t border-black">
-                        <h3 class="text-xs font-black uppercase tracking-[0.3em] text-neutral-900 mb-8">Production Pipeline</h3>
-                        <div id="cs-timeline-list" class="flex flex-col">
-                            <!-- Steps injected via JS -->
-                        </div>
+                        <h3 id="cs-timeline-title" class="text-xs font-black uppercase tracking-[0.3em] text-neutral-900 mb-8">Production Pipeline</h3>
+                        <div id="cs-timeline-list" class="flex flex-col"></div>
                     </div>
                     
                     <div id="cs-assets-container" class="hidden">
                         <div class="flex flex-col gap-2 mb-8">
                             <h3 class="text-xs font-black uppercase tracking-[0.3em] text-neutral-900" id="cs-assets-title">Raw Materials</h3>
+                            <p id="cs-assets-desc" class="text-sm font-mono-custom text-neutral-500 leading-relaxed max-w-2xl hidden"></p>
                         </div>
-                        <div id="cs-assets-grid" class="grid grid-cols-2 gap-3 mb-12">
-                            <!-- Injected assets -->
-                        </div>
-
-                        <!-- Consolidated: Atmospheric Brief box where the extra image was -->
+                        <div id="cs-assets-grid" class="grid grid-cols-2 gap-3 mb-12"></div>
                         <div id="cs-pub-brief-section" class="hidden mt-16">
                             <div class="p-8 border border-black bg-neutral-50 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
                                 <div class="flex items-center gap-4 mb-6">
@@ -403,34 +526,18 @@
                                 <p class="font-mono-custom text-sm text-neutral-500 leading-relaxed mb-6">
                                     The visual direction for the campaign was centered on placing a highly technical, synthetic product into the grit and warmth of a traditional pub setting.
                                 </p>
-                                <div class="flex flex-wrap gap-2">
-                                    <span class="text-[8px] font-bold border border-black px-2 py-1 uppercase">Low Light</span>
-                                    <span class="text-[8px] font-bold border border-black px-2 py-1 uppercase">Warm Textures</span>
-                                </div>
-                            </div>
-                            <div class="mt-4 flex items-center justify-between">
-                                <span class="text-[9px] font-bold uppercase tracking-[0.3em] text-neutral-400">Spec Ref // 010-B</span>
-                                <div class="w-12 h-[1px] bg-neutral-200"></div>
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="lg:col-span-7 flex flex-col">
-                    <h2 class="text-3xl font-bold uppercase border-b border-black pb-4 mb-4 tracking-tighter">The Result</h2>
-                    <p id="cs-solution" class="text-2xl md:text-3xl font-medium leading-tight mb-16 italic tracking-tight"></p>
-                    
-                    <!-- FIDELITY SHOWCASE -->
-                    <div id="cs-fidelity-showcase" class="hidden mb-24 space-y-12">
+                    <div id="cs-fidelity-showcase" class="hidden mt-12 mb-12 space-y-12">
                         <div class="flex items-center justify-between border-b-2 border-black pb-4">
                             <h3 class="text-xs font-bold uppercase tracking-[0.5em] text-neutral-900">Real Fidelity Check</h3>
                         </div>
-                        
                         <div class="relative w-full max-w-xl mx-auto">
                             <div class="border border-black bg-neutral-100 aspect-[3/4] overflow-hidden">
                                 <img id="cs-fidelity-main" src="" alt="Main Campaign Shoot" class="w-full h-full object-cover">
                             </div>
-                            
                             <div class="absolute -bottom-6 -right-6 md:-right-12 w-1/2 max-w-[240px] fidelity-detail border-2 border-black bg-white z-10 overflow-hidden aspect-square flex flex-col">
                                 <div class="flex-1 overflow-hidden bg-neutral-100">
                                     <img id="cs-fidelity-detail" src="" alt="Fidelity Detail" class="w-full h-full object-cover scale-[1.1]">
@@ -441,14 +548,59 @@
                             </div>
                         </div>
                     </div>
+                </div>
 
-                    <div id="cs-outcomes-container" class="hidden mb-24 space-y-16">
-                        <div id="cs-outcomes-list" class="flex flex-col gap-20">
-                            <!-- Injected -->
+                <div id="cs-right-col" class="lg:col-span-7 flex flex-col">
+                    <h2 id="cs-result-title" class="text-3xl font-bold uppercase border-b border-black pb-4 mb-4 tracking-tighter">The Result</h2>
+                    <p id="cs-solution" class="text-2xl md:text-3xl font-medium leading-tight mb-16 italic tracking-tight"></p>
+                    
+                    <div id="cs-moodboard-section" class="hidden mb-24 space-y-8">
+                        <div class="border-b-2 border-black pb-4 mb-8">
+                            <div class="flex items-center justify-between mb-2">
+                                <h3 id="cs-moodboard-title" class="text-xs font-bold uppercase tracking-[0.5em] text-neutral-900">Visual Moodboard</h3>
+                                <div id="moodboard-badge" class="px-2 py-1 bg-neutral-100 border border-black text-black text-[8px] font-black uppercase tracking-widest">Inspiration Flow</div>
+                            </div>
+                            <p id="cs-moodboard-desc" class="text-[11px] font-bold uppercase tracking-[0.1em] text-neutral-900 leading-relaxed max-w-xl hidden"></p>
+                        </div>
+                        <div class="max-w-2xl mx-auto">
+                            <div id="cs-moodboard-grid" class="columns-3 md:columns-4 gap-3 space-y-3"></div>
                         </div>
                     </div>
 
-                    <!-- Outcome Image (Bike) -->
+                    <div id="cs-campaign-section" class="hidden mb-24 space-y-8">
+                        <div class="border-b-2 border-black pb-4 mb-8">
+                            <h3 id="cs-campaign-title" class="text-2xl font-bold uppercase tracking-[0.2em] text-neutral-900">Step 2: Campaign Creation</h3>
+                            <p id="cs-campaign-desc" class="text-sm font-mono-custom text-neutral-500 leading-relaxed mt-4">
+                                Beyond product shots, I produced full campaign imagery using <span class="text-black font-bold">AI</span> to place the eyewear within high-fashion lifestyle contexts. These assets mirror the brand's iconic grit and attitude through complex model compositions.
+                            </p>
+                        </div>
+                        <div id="cs-campaign-collage" class="grid grid-cols-12 gap-4">
+                            </div>
+                    </div>
+
+                    <div id="cs-edm-section" class="hidden mb-24 space-y-8">
+                        <div class="space-y-6">
+                            <div class="flex items-center justify-between border-b-2 border-black pb-4">
+                                <h3 id="edm-title-label" class="text-xs font-bold uppercase tracking-[0.5em] text-neutral-900">Digital Comms Strategy</h3>
+                                <div id="edm-badge" class="px-2 py-1 bg-black text-white text-[8px] font-black uppercase">3x Conversion Multiple</div>
+                            </div>
+                            <p id="edm-desc-label" class="text-sm font-mono-custom text-neutral-500 leading-relaxed">
+                                I am highly proficient in full-cycle email marketing. For Utopia Goods, I designed every EDM layout from scratch in <span class="text-black font-bold">Adobe Illustrator</span> and <span class="text-black font-bold">Photoshop</span>, then managed the technical distribution and audience segmentation through <span class="text-black font-bold">Klaviyo</span>.
+                            </p>
+                        </div>
+
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="mouse-pointer-2" class="w-3.5 h-3.5 text-black"></i>
+                            <span class="text-[10px] font-bold uppercase tracking-[0.4em] text-black">SCROLL TO EXPLORE FULL EDM</span>
+                        </div>
+
+                        <div id="cs-edm-grid" class="grid grid-cols-1 md:grid-cols-2 gap-8 border border-black p-4"></div>
+                    </div>
+
+                    <div id="cs-outcomes-container" class="hidden mb-24 space-y-16">
+                        <div id="cs-outcomes-list" class="flex flex-col gap-20"></div>
+                    </div>
+
                     <div id="cs-outcome-image-container" class="hidden mb-12">
                         <div class="border border-black bg-neutral-100 aspect-[4/3] overflow-hidden">
                             <img id="cs-outcome-img" src="" alt="Outcome Visual" class="w-full h-full object-cover">
@@ -457,12 +609,8 @@
                 </div>
             </div>
 
-            <!-- Playful Gallery Section (Varied heights, tighter bottom margin) -->
-            <div id="cs-gallery" class="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12 pb-16">
-                <!-- Gallery injected -->
-            </div>
+            <div id="cs-gallery" class="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12 pb-16"></div>
 
-            <!-- Footer Section (Reduced top padding) -->
             <div class="py-8 flex justify-center border-t border-black">
                 <button onclick="hideCaseStudy()" class="group flex flex-col items-center gap-4">
                     <span class="text-[10px] font-bold uppercase tracking-[0.4em] text-neutral-400">Done</span>
@@ -474,16 +622,40 @@
     </div>
 
     <script>
+        let currentIgSlide = 0;
+        let totalIgSlides = 3;
+        let activeAssetList = [];
+        let activeAssetIndex = 0;
+
+        function updateIgSlide() {
+            const carousel = document.getElementById('ig-carousel');
+            const counter = document.getElementById('ig-counter');
+            if (carousel) {
+                carousel.style.transform = `translateX(-${currentIgSlide * 100}%)`;
+                counter.innerText = `${currentIgSlide + 1}/${totalIgSlides}`;
+            }
+        }
+
+        function nextIgSlide() {
+            currentIgSlide = (currentIgSlide + 1) % totalIgSlides;
+            updateIgSlide();
+        }
+
+        function prevIgSlide() {
+            currentIgSlide = (currentIgSlide - 1 + totalIgSlides) % totalIgSlides;
+            updateIgSlide();
+        }
+
         const caseStudies = {
             lumina: {
                 title: "Crude Routes",
-                subheading: "Tactile vs. Synthetic.",
+                subheading: "Art Direction & Manufacturing.",
                 tag: "Project — 01",
                 year: "2025",
-                role: "Art Director / Designer",
-                focus: "Global Sourcing / AI",
-                brief: "This was an experiment in building a brand at speed without the usual overhead. I started with a bunch of digital moodboards and technical specs, then scoured Alibaba to find a manufacturer for the physical prototype. Once the sample was in my hands and verified, I built out the campaign world using visual synthesis.",
-                solution: "The result is a hybrid brand identity where a physical product lives in a completely synthetic playground. We cut the production timeline by 80%.",
+                role: "Creative Lead",
+                focus: "Global Sourcing / Art Direction",
+                brief: "Developing high-end campaign assets by bridging the gap between offshore manufacturing and digital art direction. By integrating professional photo editing with AI, we created a premium visual ecosystem at a fraction of traditional production costs.",
+                solution: "A scalable art direction model that combines physical product sampling with AI-generated environments to launch brands faster.",
                 hero: "https://i.imgur.com/loZbRhd.jpeg",
                 supportImg: "https://i.imgur.com/tVE1KMh.jpeg", 
                 outcomeImg: "https://i.imgur.com/wgpl6sq.jpeg",
@@ -493,55 +665,198 @@
                     zoom: "https://i.imgur.com/3EBAUG0.png"   
                 },
                 assets: {
-                    title: "Factory Pipeline",
+                    title: "Production Pipeline",
                     items: [
-                        { url: "https://i.imgur.com/omwK7XG.png", label: "Front" },
-                        { url: "https://i.imgur.com/TxFbNcu.jpeg", label: "Three Quarter" },
-                        { url: "https://i.imgur.com/sYZPWF6.jpeg", label: "Back" },
-                        { url: "https://i.imgur.com/Ph54zyd.jpeg", label: "Side" }
+                        { url: "https://i.imgur.com/omwK7XG.png", label: "Front Profile" },
+                        { url: "https://i.imgur.com/TxFbNcu.jpeg", label: "Spec Detail" },
+                        { url: "https://i.imgur.com/n2zw4nj.jpeg", label: "Sample A" },
+                        { url: "https://i.imgur.com/mnO8nMq.jpeg", label: "Sample B" }
                     ]
                 },
                 timeline: [
-                    { title: "The Spark", desc: "Visual Research & Vibe-check" },
-                    { title: "Drafting", desc: "Technical Vector Specs" },
-                    { title: "The Wrap", desc: "Synthetic Campaign Generation" }
+                    { title: "Market Research", desc: "Sourcing & Analysis" },
+                    { title: "Prototyping", desc: "Manufacturing Specs" }
                 ],
                 outcomes: [
-                    { title: "Real Fidelity", desc: "The physical sample and the synthetic campaign assets match 1:1." },
-                    { title: "Hyper Speed", desc: "I can pivot the entire campaign look in a single afternoon." },
-                    { title: "Future Ready", desc: "The modular nature of the production pipeline allows for infinite iterations without re-shooting." }
+                    { title: "Visual Consistency", desc: "Matching physical samples to premium digital standards." },
+                    { title: "Scalable Content", desc: "Using AI to generate campaign assets in record time." }
                 ],
                 gallery: [
-                    { url: "https://i.imgur.com/J4denA0.jpeg", style: "aspect-[3/4] md:translate-y-12" },
-                    { url: "https://i.imgur.com/rqJxlPl.jpeg", style: "aspect-square md:scale-110 z-10" },
-                    { url: "https://i.imgur.com/HlmQXvO.jpeg", style: "aspect-[3/5] md:-translate-y-8" }
+                    { url: "https://i.imgur.com/J4denA0.jpeg", style: "aspect-[3/4]" },
+                    { url: "https://i.imgur.com/rqJxlPl.jpeg", style: "aspect-square" },
+                    { url: "https://i.imgur.com/HlmQXvO.jpeg", style: "aspect-[3/5]" }
                 ]
             },
             aura: {
-                title: "Aura Wearables",
-                subheading: "Editorial focus for biometric tech.",
+                title: "Utopia Goods",
+                subheading: "Heritage Brand Strategy.",
                 tag: "Project — 02",
-                year: "2023",
-                role: "Lead",
-                focus: "Shopify / 3D",
-                brief: "Aura required a repositioning of their health tracker from a functional biometric tool to a luxury accessory.",
-                solution: "Utilized minimalist typography and atmospheric product rendering.",
-                hero: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=1600&q=80",
+                year: "2023 — 2024",
+                role: "Digital Marketing Specialist",
+                focus: "CRM / Marketing Automation",
+                brief: `I led the digital transformation for Utopia Goods, a luxury textile brand, focusing on high-converting email marketing and automated customer journeys. By modernizing their communication architecture, we increased audience engagement and revenue while preserving the brand's legacy.
+                        <div class="mt-12 pt-12 border-t border-black space-y-6">
+                            <h3 class="text-[11px] font-black uppercase tracking-[0.5em] text-neutral-900">Campaign Performance</h3>
+                            <p class="text-sm font-mono-custom text-neutral-500 leading-relaxed">
+                                By implementing audience segmentation and story-first layouts, we achieved a conversion multiple <span class="text-black font-bold">3x higher</span> than the brand average.
+                            </p>
+                            <div class="border border-black bg-white overflow-hidden shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] w-full">
+                                <img src="https://i.imgur.com/IZmc2UH.png" alt="Performance Chart" class="w-full h-auto block">
+                            </div>
+                        </div>`,
+                solution: "Engineered a content-led marketing ecosystem that maintained luxury positioning while achieving record-breaking sales growth through automated funnels.",
+                hero: "https://i.imgur.com/54L5CJi.png",
+                showWeavy: true,
+                showSocial: true,
+                socialBrief: "Our most impactful campaigns utilized narrative-driven social content to deepen brand loyalty before moving to a direct sales approach.",
+                socialGallery: [
+                    "https://i.imgur.com/KMJ1ZGe.jpeg",
+                    "https://i.imgur.com/PEButCr.jpeg",
+                    "https://i.imgur.com/G2BmyYz.jpeg",
+                    "https://i.imgur.com/beeFY93.jpeg",
+                    "https://i.imgur.com/b1etfN9.jpeg",
+                    "https://i.imgur.com/aq5CYZM.jpeg",
+                    "https://i.imgur.com/jrb3lIQ.jpeg"
+                ],
+                socialCustomData: {
+                    username: "utopiagoods",
+                    profilePic: "https://i.imgur.com/R4jqlxa.jpeg",
+                    likes: "850+ likes",
+                    engagement: "400 NEW FOLLOWERS",
+                    aspectClass: "aspect-[3/4]"
+                },
+                showEdm: true,
+                edms: [
+                    { url: "https://i.imgur.com/sww6Lvg.jpeg", aspect: "aspect-[1/2.2]", scrollable: true },
+                    { url: "https://i.imgur.com/VGqKT7t.jpeg", aspect: "aspect-[1/2.2]", scrollable: true },
+                    { url: "https://i.imgur.com/XN1jXf0.jpeg", aspect: "aspect-[1/2.2]", scrollable: true },
+                    { url: "https://i.imgur.com/uGmsdnp.jpeg", aspect: "aspect-[1/2.2]", scrollable: true }
+                ],
                 gallery: [
-                    { url: "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1200&q=80", style: "aspect-square" },
-                    { url: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=1200&q=80", style: "aspect-square" },
-                    { url: "https://images.unsplash.com/photo-1551488831-00ddcb6c6bd3?w=1200&q=80", style: "aspect-square" }
+                    { url: "https://images.unsplash.com/photo-1616627781431-23b776ace7b2?w=1200&q=80", style: "aspect-square" },
+                    { url: "https://images.unsplash.com/photo-1551488831-00ddcb6c6bd3?w=1200&q=80", style: "aspect-square" },
+                    { url: "https://images.unsplash.com/photo-1594913785162-e6786b02dbaa?w=1200&q=80", style: "aspect-square" }
+                ]
+            },
+            chrome_hearts: {
+                title: "Chrome Hearts",
+                subheading: "Digital Content Art Direction.",
+                tag: "Concept — 01",
+                year: "2025",
+                role: "Content Strategist",
+                focus: "Art Direction / Asset Production",
+                processTitle: "The Concept",
+                resultTitle: "The Execution",
+                brief: "The goal for this concept was to create a full EDM and product release campaign asset-pack/photoshoot with almost no material. I took mid-quality photos from Grailed (reselling marketplace) of the Vagillionaire II and turned them into high-end editorial assets. I wanted to push my design skills to recreate the brand's specific dark-luxe aesthetic from simple references.",
+                solution: "I produced a set of high-impact visuals, including campaign-ready lifestyle shots and studio-quality product frames. The result is a cohesive collection of marketing material that stays true to the iconic brand identity – made from very little source material.",
+                isCollageHero: true,
+                heroCollage: [
+                    "https://i.imgur.com/9frRN0E.jpeg",
+                    "https://i.imgur.com/ag9jcRv.png",
+                    "https://i.imgur.com/wDbxBt4.png",
+                    "https://images.unsplash.com/photo-1473496169904-658ba7c44d8a?w=800&q=80"
+                ],
+                fidelity: {
+                    main: "https://i.imgur.com/9frRN0E.jpeg", 
+                    zoom: "https://i.imgur.com/9frRN0E.jpeg"   
+                },
+                showEdm: true,
+                edmCustomLabels: {
+                    title: "EXAMPLE EDM CONCEPT BY ME",
+                    desc: "Using my EDM design skills and understanding of brand aesthetics, I created this concept to show how I can use professional design tools like <span class='text-black font-bold'>Photoshop</span> and <span class='text-black font-bold'>Illustrator</span> to build high-impact marketing materials.",
+                    badge: ""
+                },
+                edms: [
+                    { url: "https://i.imgur.com/lGzYEss.jpeg", aspect: "aspect-[1/3.5]", scrollable: true, isLarge: true }
+                ],
+                moodboardDesc: "I analyzed authentic Chrome Hearts campaigns to extract the key visual cues required for my own creative execution.",
+                moodboard: [
+                    "https://i.imgur.com/hO9WyN1.png", "https://i.imgur.com/yLc5jG7.png", "https://i.imgur.com/FapltVh.jpeg",
+                    "https://i.imgur.com/dL6F6Ox.jpeg", "https://i.imgur.com/UteGY8A.jpeg", "https://i.imgur.com/MOqCNff.jpeg",
+                    "https://i.imgur.com/OPRj9WL.jpeg", "https://i.imgur.com/2DqZWjM.jpeg", "https://i.imgur.com/l2Dtygh.jpeg",
+                    "https://i.imgur.com/sRR6oMT.jpeg", "https://i.imgur.com/pFC2QDa.jpeg", "https://i.imgur.com/KAxkKuG.jpeg",
+                    "https://i.imgur.com/lfrPxNz.jpeg", "https://i.imgur.com/ysjlHpq.jpeg", "https://i.imgur.com/ygWN2nB.jpeg"
+                ],
+                campaignCollage: [
+                    "https://images.unsplash.com/photo-1492691523567-6112564a7343?w=800&q=80",
+                    "https://images.unsplash.com/photo-1512436991641-6745cdb1723f?w=800&q=80",
+                    "https://images.unsplash.com/photo-1513364776144-60967b0f800f?w=800&q=80",
+                    "https://images.unsplash.com/photo-1509631179647-0177331693ae?w=800&q=80",
+                    "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=800&q=80",
+                    "https://images.unsplash.com/photo-1445205170230-053b83016050?w=800&q=80"
+                ],
+                assets: {
+                    title: "STUDIO CONTENT MADE WITH AI",
+                    desc: "I sourced raw photography from <span class='text-black font-bold'>Grailed</span> (a popular reselling site), and then <span class='text-black font-bold'>regenerated</span> the images below to match the existing <span class='text-black font-bold'>Chrome Hearts studio aesthetic</span> showcased in my moodboard above.",
+                    items: [
+                        { url: "https://i.imgur.com/8EyiSYA.jpeg", label: "Studio Hero: Content Scaling" },
+                        { url: "https://i.imgur.com/3rWMmfJ.jpeg", label: "Detail Shot" },
+                        { url: "https://i.imgur.com/W3wI25e.png", label: "Material Polish" },
+                        { url: "https://i.imgur.com/Uq1yuN4.jpeg", label: "Lighting Concept" },
+                        { url: "https://i.imgur.com/AH72TNv.jpeg", label: "Composite Frame" }
+                    ]
+                },
+                gallery: [
+                    { url: "https://images.unsplash.com/photo-1511499767150-a48a237f0083?w=800&q=80", style: "aspect-[5/4]" },
+                    { url: "https://images.unsplash.com/photo-1577803645773-f96470509666?w=800&q=80", style: "aspect-[3/4]" },
+                    { url: "https://images.unsplash.com/photo-1473496169904-658ba7c44d8a?w=800&q=80", style: "aspect-[3/4]" }
                 ]
             }
         };
 
-        function openAssetPreview(url, label) {
+        // NAVIGATION LOGIC
+        function navToSection(targetId) {
+            const csPage = document.getElementById('case-study-page');
+            const isActiveCaseStudy = csPage.classList.contains('active-page');
+
+            if (isActiveCaseStudy) {
+                hideCaseStudy();
+                setTimeout(() => { performScroll(targetId); }, 450);
+            } else {
+                performScroll(targetId);
+            }
+        }
+
+        function performScroll(id) {
+            if (id === 'home-page') {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            } else {
+                const el = document.getElementById(id);
+                if (el) el.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        function openAssetPreview(list, index) {
+            if(!list || !list[index]) return;
+            activeAssetList = list;
+            activeAssetIndex = index;
+            
             const overlay = document.getElementById('asset-overlay');
             const previewImg = document.getElementById('preview-img');
             const previewLabel = document.getElementById('preview-label');
-            previewImg.src = url;
-            previewLabel.innerText = label;
+            const scrollContainer = document.getElementById('preview-scroll-container');
+            
+            previewImg.src = list[index].url || list[index];
+            previewLabel.innerText = list[index].label || "";
             overlay.classList.add('active');
+            scrollContainer.scrollTop = 0;
+            
+            const hasMany = list.length > 1;
+            document.getElementById('asset-prev').style.display = hasMany ? 'block' : 'none';
+            document.getElementById('asset-next').style.display = hasMany ? 'block' : 'none';
+        }
+
+        function navigateAsset(direction) {
+            if (!activeAssetList.length) return;
+            activeAssetIndex = (activeAssetIndex + direction + activeAssetList.length) % activeAssetList.length;
+            
+            const previewImg = document.getElementById('preview-img');
+            const previewLabel = document.getElementById('preview-label');
+            const scrollContainer = document.getElementById('preview-scroll-container');
+            
+            previewImg.src = activeAssetList[activeAssetIndex].url || activeAssetList[activeAssetIndex];
+            previewLabel.innerText = activeAssetList[activeAssetIndex].label || "";
+            scrollContainer.scrollTop = 0;
         }
 
         function closeAssetPreview() {
@@ -552,86 +867,231 @@
             const data = caseStudies[id];
             if (!data) return;
 
+            currentIgSlide = 0;
+            const carousel = document.getElementById('ig-carousel');
+            const aspectContainer = document.getElementById('ig-aspect-container');
+            const likesText = document.getElementById('ig-likes-text');
+            const engagementText = document.getElementById('ig-engagement-text');
+            const userTop = document.getElementById('ig-username-top');
+            const userCaption = document.getElementById('ig-username-caption');
+            const profilePic = document.getElementById('ig-profile-pic');
+
+            if (data.showSocial && data.socialGallery) {
+                totalIgSlides = data.socialGallery.length;
+                carousel.innerHTML = data.socialGallery.map(url => `<img src="${url}" class="ig-slide object-cover h-full">`).join('');
+                if (data.socialCustomData) {
+                    likesText.innerText = data.socialCustomData.likes;
+                    engagementText.innerText = data.socialCustomData.engagement;
+                    userTop.innerText = data.socialCustomData.username || "username";
+                    userCaption.innerText = data.socialCustomData.username || "username";
+                    profilePic.src = data.socialCustomData.profilePic || "";
+                    aspectContainer.className = `relative overflow-hidden group ${data.socialCustomData.aspectClass}`;
+                }
+                updateIgSlide();
+            }
+
             document.getElementById('cs-title').innerText = data.title;
             document.getElementById('cs-subheading').innerText = data.subheading || "";
             document.getElementById('cs-tag').innerText = data.tag;
             document.getElementById('cs-year').innerText = data.year;
             document.getElementById('cs-role').innerText = data.role;
             document.getElementById('cs-focus').innerText = data.focus;
-            document.getElementById('cs-brief').innerText = data.brief;
+            document.getElementById('cs-brief').innerHTML = data.brief;
             document.getElementById('cs-solution').innerText = data.solution;
-            document.getElementById('cs-hero-img').src = data.hero;
             document.getElementById('cs-nav-title').innerText = data.title;
 
-            const pubBrief = document.getElementById('cs-pub-brief-section');
-            pubBrief.classList.toggle('hidden', !data.showPubBrief);
+            // Handle dynamic titles for the case study sections
+            document.getElementById('cs-process-title').innerText = data.processTitle || "The Process";
+            document.getElementById('cs-result-title').innerText = data.resultTitle || "The Result";
 
-            const supportImgContainer = document.getElementById('cs-support-image-container');
-            if (data.supportImg) {
-                supportImgContainer.classList.remove('hidden');
-                document.getElementById('cs-support-img').src = data.supportImg;
-            } else { supportImgContainer.classList.add('hidden'); }
-
-            const outcomeImgContainer = document.getElementById('cs-outcome-image-container');
-            if (data.outcomeImg) {
-                outcomeImgContainer.classList.remove('hidden');
-                document.getElementById('cs-outcome-img').src = data.outcomeImg;
-            } else { outcomeImgContainer.classList.add('hidden'); }
-
-            const fidelityShowcase = document.getElementById('cs-fidelity-showcase');
-            if (data.fidelity) {
-                fidelityShowcase.classList.remove('hidden');
-                document.getElementById('cs-fidelity-main').src = data.fidelity.main;
-                document.getElementById('cs-fidelity-detail').src = data.fidelity.zoom;
-            } else { fidelityShowcase.classList.add('hidden'); }
-
+            const edmSection = document.getElementById('cs-edm-section');
+            const edmGrid = document.getElementById('cs-edm-grid');
+            const edmTitleLabel = document.getElementById('edm-title-label');
+            const edmBadge = document.getElementById('edm-badge');
             const assetsContainer = document.getElementById('cs-assets-container');
             const assetsGrid = document.getElementById('cs-assets-grid');
+            const assetsDesc = document.getElementById('cs-assets-desc');
+            const campaignSection = document.getElementById('cs-campaign-section');
+            const campaignCollage = document.getElementById('cs-campaign-collage');
+            const fidelityShowcase = document.getElementById('cs-fidelity-showcase');
+            const leftCol = document.getElementById('cs-left-col');
+            const rightCol = document.getElementById('cs-right-col');
+            const gridLayout = document.getElementById('cs-grid-layout');
+            const timelineContainer = document.getElementById('cs-timeline-container');
+            const timelineTitle = document.getElementById('cs-timeline-title');
+            const moodboardSection = document.getElementById('cs-moodboard-section');
+            const moodboardTitle = document.getElementById('cs-moodboard-title');
+            const moodboardGrid = document.getElementById('cs-moodboard-grid');
+            const moodboardDesc = document.getElementById('cs-moodboard-desc');
+            const moodboardBadge = document.getElementById('moodboard-badge');
+            const assetsTitle = document.getElementById('cs-assets-title');
+
+            moodboardTitle.className = "text-xs font-bold uppercase tracking-[0.5em] text-neutral-900";
+            assetsTitle.className = "text-xs font-black uppercase tracking-[0.3em] text-neutral-900";
+            edmTitleLabel.className = "text-xs font-bold uppercase tracking-[0.5em] text-neutral-900";
+            edmBadge.className = "px-2 py-1 bg-black text-white text-[8px] font-black uppercase";
+            timelineTitle.className = "text-xs font-black uppercase tracking-[0.3em] text-neutral-900 mb-8";
+            timelineTitle.innerText = "Production Pipeline";
+            moodboardBadge.classList.remove('hidden');
+
+            const heroContainer = document.getElementById('cs-hero-container');
+            if (data.isCollageHero && data.heroCollage) {
+                heroContainer.innerHTML = `
+                    <div class="grid grid-cols-1 md:grid-cols-12 gap-4">
+                        <div class="md:col-span-8 border border-black bg-neutral-100 aspect-video md:aspect-auto overflow-hidden">
+                            <img src="${data.heroCollage[0]}" class="w-full h-full object-cover">
+                        </div>
+                        <div class="md:col-span-4 grid grid-cols-2 md:grid-cols-1 gap-4">
+                            <div class="border border-black bg-neutral-100 aspect-square overflow-hidden">
+                                <img src="${data.heroCollage[1]}" class="w-full h-full object-cover">
+                            </div>
+                            <div class="border border-black bg-neutral-100 aspect-square overflow-hidden">
+                                <img src="${data.heroCollage[2]}" class="w-full h-full object-cover">
+                            </div>
+                        </div>
+                    </div>
+                    <p class="mt-6 text-sm font-mono-custom text-neutral-500 leading-relaxed max-w-3xl">
+                        Every visual element within this concept was designed by me. This collection is a set of original creations meant to show how high-end brand assets can be produced from minimal reference data.
+                    </p>
+                `;
+            } else {
+                heroContainer.innerHTML = `<div class="border border-black bg-neutral-100 aspect-video overflow-hidden"><img id="cs-hero-img" src="${data.hero}" alt="Hero" class="w-full h-full object-cover object-top"></div>`;
+            }
+
+            document.getElementById('cs-weavy-container').classList.toggle('hidden', !data.showWeavy);
+            document.getElementById('cs-social-container').classList.toggle('hidden', !data.showSocial);
+            if(data.showSocial) document.getElementById('cs-social-brief').innerText = data.socialBrief;
+            
+            if (id === 'chrome_hearts') {
+                moodboardTitle.className = "text-2xl font-bold uppercase tracking-[0.2em] text-neutral-900";
+                moodboardTitle.innerText = "Step 1: Moodboarding";
+                assetsTitle.className = "text-2xl font-black uppercase tracking-[0.1em] text-neutral-900";
+                edmTitleLabel.className = "text-2xl font-bold uppercase tracking-[0.2em] text-neutral-900";
+                edmBadge.className = "hidden";
+                moodboardBadge.classList.add('hidden');
+                
+                // Chrome Hearts Specific Order:
+                leftCol.appendChild(moodboardSection);
+                leftCol.appendChild(assetsContainer);
+                rightCol.appendChild(edmSection);
+                
+                // Move Campaign Section to Bottom (Full Width)
+                gridLayout.after(campaignSection);
+                campaignSection.className = "mb-24 space-y-8 w-full"; // Ensure full width
+                
+                // Hide Fidelity and Timeline for Chrome Hearts
+                fidelityShowcase.classList.add('hidden');
+                timelineContainer.classList.add('hidden');
+                
+                campaignSection.classList.remove('hidden');
+                campaignCollage.innerHTML = `
+                    <div class="col-span-12 md:col-span-7 border border-black bg-neutral-100 aspect-video md:aspect-[4/3] overflow-hidden cursor-pointer" onclick="openAssetPreview(caseStudies['${id}'].campaignCollage, 0)">
+                        <img src="${data.campaignCollage[0]}" class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700">
+                    </div>
+                    <div class="col-span-6 md:col-span-5 border border-black bg-neutral-100 aspect-square overflow-hidden cursor-pointer" onclick="openAssetPreview(caseStudies['${id}'].campaignCollage, 1)">
+                        <img src="${data.campaignCollage[1]}" class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700">
+                    </div>
+                    <div class="col-span-6 md:col-span-4 border border-black bg-neutral-100 aspect-[3/4] overflow-hidden cursor-pointer" onclick="openAssetPreview(caseStudies['${id}'].campaignCollage, 2)">
+                        <img src="${data.campaignCollage[2]}" class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700">
+                    </div>
+                    <div class="col-span-12 md:col-span-8 border border-black bg-neutral-100 aspect-video overflow-hidden cursor-pointer" onclick="openAssetPreview(caseStudies['${id}'].campaignCollage, 3)">
+                        <img src="${data.campaignCollage[3]}" class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700">
+                    </div>
+                    <div class="col-span-6 border border-black bg-neutral-100 aspect-square overflow-hidden cursor-pointer" onclick="openAssetPreview(caseStudies['${id}'].campaignCollage, 4)">
+                        <img src="${data.campaignCollage[4]}" class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700">
+                    </div>
+                    <div class="col-span-6 border border-black bg-neutral-100 aspect-square overflow-hidden cursor-pointer" onclick="openAssetPreview(caseStudies['${id}'].campaignCollage, 5)">
+                        <img src="${data.campaignCollage[5]}" class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700">
+                    </div>
+                `;
+
+                edmGrid.className = "flex flex-col items-center w-full";
+                assetsGrid.className = "grid grid-cols-2 gap-3 mb-12";
+                assetsTitle.innerHTML = `STUDIO CONTENT MADE WITH AI <span class="ml-2 text-[8px] text-neutral-400 font-bold tracking-widest uppercase align-middle">— Click to view full image</span>`;
+            } else {
+                moodboardTitle.innerText = "Visual Moodboard";
+                campaignSection.classList.add('hidden');
+                campaignSection.className = "hidden mb-24 space-y-8"; // Reset
+                
+                // Reset positions for other projects
+                leftCol.appendChild(assetsContainer);
+                rightCol.insertBefore(moodboardSection, document.getElementById('cs-outcomes-container'));
+                rightCol.insertBefore(edmSection, document.getElementById('cs-outcomes-container'));
+                rightCol.appendChild(fidelityShowcase);
+                
+                edmGrid.className = "grid grid-cols-1 md:grid-cols-2 gap-8";
+                assetsGrid.className = "grid grid-cols-2 gap-3 mb-12";
+                if (data.assets) assetsTitle.innerText = data.assets.title;
+            }
+
+            if(data.showEdm && data.edms) {
+                edmSection.classList.remove('hidden');
+                if(data.edmCustomLabels) {
+                    edmTitleLabel.innerText = data.edmCustomLabels.title;
+                    document.getElementById('edm-desc-label').innerHTML = data.edmCustomLabels.desc;
+                }
+                const scrollerHeight = id === 'chrome_hearts' ? '1200px' : '600px';
+                edmGrid.innerHTML = data.edms.map(edm => `<div class="flex flex-col gap-3 w-full"><div class="embedded-edm-scroller" style="height: ${scrollerHeight};"><img src="${edm.url}" class="w-full h-auto block"></div></div>`).join('');
+            } else { edmSection.classList.add('hidden'); }
+
+            if (data.assets && data.assets.desc) {
+                assetsDesc.innerHTML = data.assets.desc;
+                assetsDesc.classList.remove('hidden');
+            } else { assetsDesc.classList.add('hidden'); }
+
+            if (data.moodboard) {
+                moodboardSection.classList.remove('hidden');
+                if (data.moodboardDesc) {
+                    moodboardDesc.innerText = data.moodboardDesc;
+                    moodboardDesc.classList.remove('hidden');
+                }
+                moodboardGrid.innerHTML = data.moodboard.map((url, index) => `<div class="mb-4 break-inside-avoid border border-black overflow-hidden bg-neutral-100 group/mood inline-block w-full cursor-pointer" onclick="openAssetPreview(caseStudies['${id}'].moodboard, ${index})"><img src="${url}" class="w-full h-auto block transition-all duration-700 hover:scale-105" loading="lazy"></div>`).join('');
+            } else { moodboardSection.classList.add('hidden'); }
+
+            document.getElementById('cs-pub-brief-section').classList.toggle('hidden', !data.showPubBrief);
+
+            if (data.supportImg) {
+                document.getElementById('cs-support-image-container').classList.remove('hidden');
+                document.getElementById('cs-support-img').src = data.supportImg;
+            }
+            if (data.outcomeImg) {
+                document.getElementById('cs-outcome-image-container').classList.remove('hidden');
+                document.getElementById('cs-outcome-img').src = data.outcomeImg;
+            }
+
+            if (data.fidelity) {
+                if (id !== 'chrome_hearts') fidelityShowcase.classList.remove('hidden');
+                document.getElementById('cs-fidelity-main').src = data.fidelity.main;
+                document.getElementById('cs-fidelity-detail').src = data.fidelity.zoom;
+            }
+
             if (data.assets) {
                 assetsContainer.classList.remove('hidden');
-                document.getElementById('cs-assets-title').innerText = data.assets.title;
-                assetsGrid.innerHTML = data.assets.items.map((asset) => `
-                    <div class="group relative aspect-square border border-black overflow-hidden bg-neutral-100" 
-                         onmouseenter="openAssetPreview('${asset.url}', '${asset.label}')">
-                        <img src="${asset.url}" class="w-full h-full object-cover">
-                    </div>
-                `).join('');
-            } else { assetsContainer.classList.add('hidden'); }
+                assetsGrid.innerHTML = data.assets.items.map((asset, index) => `<div class="group relative ${id === 'chrome_hearts' && index === 0 ? 'col-span-2 aspect-video' : 'aspect-square'} border border-black overflow-hidden bg-neutral-100 cursor-pointer" onclick="openAssetPreview(caseStudies['${id}'].assets.items, ${index})"><img src="${asset.url}" class="w-full h-full object-cover"></div>`).join('');
+            }
 
             const timelineList = document.getElementById('cs-timeline-list');
             if (data.timeline) {
                 document.getElementById('cs-timeline-container').classList.remove('hidden');
-                timelineList.innerHTML = data.timeline.map(step => `
-                    <div class="timeline-step">
-                        <div class="timeline-dot"></div>
-                        <h4 class="text-xl font-bold uppercase tracking-tight">${step.title}</h4>
-                        <p class="text-sm text-neutral-400 font-mono-custom uppercase tracking-widest mt-1">${step.desc}</p>
-                    </div>
-                `).join('');
-            } else { document.getElementById('cs-timeline-container').classList.add('hidden'); }
+                timelineList.innerHTML = data.timeline.map((step, index) => {
+                    let html = `<div class="timeline-step"><div class="timeline-dot"></div><h4 class="text-xl font-bold uppercase tracking-tight">${step.title}</h4><p class="text-sm text-neutral-400 font-mono-custom uppercase tracking-widest mt-1">${step.desc}</p></div>`;
+                    return html;
+                }).join('');
+            } else { 
+                if (id !== 'chrome_hearts') document.getElementById('cs-timeline-container').classList.add('hidden'); 
+            }
 
             const outcomesList = document.getElementById('cs-outcomes-list');
-            if (data.outcomes) {
+            if (data.outcomes && data.outcomes.length > 0) {
                 document.getElementById('cs-outcomes-container').classList.remove('hidden');
-                outcomesList.innerHTML = data.outcomes.map((item, i) => `
-                    <div class="flex flex-col md:flex-row gap-8 group">
-                        <div class="md:w-20 shrink-0">
-                             <span class="text-4xl font-bold font-mono-custom text-black/10 group-hover:text-black transition-colors">0${i+1}</span>
-                        </div>
-                        <div class="space-y-4 flex-1">
-                            <h4 class="text-2xl font-bold uppercase">${item.title}</h4>
-                            <p class="text-lg font-mono-custom text-neutral-500 max-w-2xl">${item.desc}</p>
-                        </div>
-                    </div>
-                `).join('');
-            } else { document.getElementById('cs-outcomes-container').classList.add('hidden'); }
+                outcomesList.innerHTML = data.outcomes.map((item, i) => `<div class="flex flex-col md:flex-row gap-8 group"><div class="md:w-20 shrink-0"><span class="text-4xl font-bold font-mono-custom text-black/10 group-hover:text-black transition-colors">0${i+1}</span></div><div class="space-y-4 flex-1"><h4 class="text-2xl font-bold uppercase">${item.title}</h4><p class="text-lg font-mono-custom text-neutral-500 max-w-2xl">${item.desc}</p></div></div>`).join('');
+            } else {
+                document.getElementById('cs-outcomes-container').classList.add('hidden');
+            }
 
-            // Gallery with Layout Logic
-            document.getElementById('cs-gallery').innerHTML = data.gallery.map(imgObj => `
-                <div class="border border-black overflow-hidden bg-neutral-100 transition-all duration-700 ${imgObj.style}">
-                    <img src="${imgObj.url}" class="w-full h-full object-cover">
-                </div>
-            `).join('');
+            if (data.gallery) {
+                document.getElementById('cs-gallery').innerHTML = data.gallery.map(imgObj => `<div class="border border-black overflow-hidden bg-neutral-100 transition-all duration-700 ${imgObj.style}"><img src="${imgObj.url}" class="w-full h-full object-cover"></div>`).join('');
+            }
 
             const home = document.getElementById('home-page');
             const cs = document.getElementById('case-study-page');
@@ -654,9 +1114,7 @@
             setTimeout(() => {
                 cs.style.display = 'none';
                 home.style.display = 'block';
-                setTimeout(() => {
-                    home.classList.replace('hidden-page', 'active-page');
-                }, 50);
+                setTimeout(() => { home.classList.replace('hidden-page', 'active-page'); }, 50);
             }, 400);
         }
 
@@ -672,9 +1130,7 @@
             renderer.setSize(window.innerWidth, window.innerHeight);
             renderer.setPixelRatio(window.devicePixelRatio);
             container.appendChild(renderer.domElement);
-            const geometry = new THREE.BoxGeometry(15, 15, 15);
-            const material = new THREE.MeshBasicMaterial({ color: 0x000000, wireframe: true, transparent: true, opacity: 0.05 });
-            const cube = new THREE.Mesh(geometry, material);
+            const cube = new THREE.Mesh(new THREE.BoxGeometry(15, 15, 15), new THREE.MeshBasicMaterial({ color: 0x000000, wireframe: true, transparent: true, opacity: 0.05 }));
             scene.add(cube);
             let mouseX = 0, mouseY = 0;
             window.addEventListener('mousemove', (e) => {
@@ -697,6 +1153,7 @@
             });
         }
         window.onload = initThree;
+        window.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeAssetPreview(); });
     </script>
 </body>
 </html>
