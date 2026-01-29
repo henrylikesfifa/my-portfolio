@@ -254,7 +254,7 @@
             border-top: 1px solid #e5e5e5;
         }
         .hero-tools-heading {
-            font-size: 9px;
+            font-size: 11px;
             font-weight: 800;
             letter-spacing: 0.2em;
             text-transform: uppercase;
@@ -267,7 +267,7 @@
             gap: 6px;
         }
         .hero-tool-chip {
-            font-size: 10px;
+            font-size: 12px;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 0.05em;
@@ -414,7 +414,7 @@
             <div class="flex flex-col md:flex-row justify-between items-end gap-12 pointer-events-auto w-full max-w-7xl mx-auto mb-4">
                 <div class="max-w-xs space-y-8 mb-4 md:mb-0">
                     <p class="text-sm leading-relaxed text-neutral-500 font-medium border-l-2 border-black pl-4">
-                        Ecommerce all-rounder based in Sydney. Shopify, marketing creative, and organic growth.
+                        Ecommerce all-rounder based in Sydney. Shopify, marketing creative, organic & paid growth.
                     </p>
                     <button onclick="navToSection('work')" class="group flex items-center gap-2 text-[10px] font-bold tracking-[0.2em] uppercase border border-black p-4 hover:bg-black hover:text-white transition-all cursor-pointer">
                         View Projects <i data-lucide="arrow-down" class="w-3 h-3 group-hover:translate-y-1 transition-transform"></i>
@@ -426,7 +426,6 @@
                         <span class="block uppercase">Designed</span>
                         <span class="block text-neutral-200 uppercase">For Growth</span>
                     </h1>
-                    <p class="text-xl md:text-2xl text-neutral-400 font-medium mt-4 tracking-tight font-mono-custom italic">EST. 2003</p>
                 </div>
             </div>
         </header>
@@ -452,16 +451,21 @@
                         
                         <!-- New Tools Block -->
                         <div class="hero-tools-container">
-                            <h4 class="hero-tools-heading">TOOLS</h4>
+                            <h4 class="hero-tools-heading">TOOLS/SKILLS</h4>
                             <div class="hero-tools-chips">
                                 <span class="hero-tool-chip">Shopify</span>
                                 <span class="hero-tool-chip">Klaviyo</span>
                                 <span class="hero-tool-chip">Adobe (Photoshop/Illustrator)</span>
                                 <span class="hero-tool-chip">Canva</span>
                                 <span class="hero-tool-chip">Meta Ads</span>
-                                <span class="hero-tool-chip">Midjourney</span>
+                                <span class="hero-tool-chip">Google Ads</span>
+                                <span class="hero-tool-chip">SEO</span>
+                                <span class="hero-tool-chip">Figma</span>
+                                <span class="hero-tool-chip">CapCut</span>
+                                <span class="hero-tool-chip">Weavy</span>
                                 <span class="hero-tool-chip">Nano Banana</span>
                                 <span class="hero-tool-chip">Notion</span>
+                                <span class="hero-tool-chip">Office 365</span>
                                 <span class="hero-tool-chip">Excel</span>
                             </div>
                         </div>
@@ -480,7 +484,7 @@
                             <div class="hero-list-panel">
                                 <h3 class="hero-list-title">WHAT I MAKE AND MANAGE</h3>
                                 <ul class="hero-list-ul">
-                                    <li class="hero-list-item">Shopify updates and landing pages</li>
+                                    <li class="hero-list-item">Website builds and conversion-focused landing pages</li>
                                     <li class="hero-list-item">SEO clean-up and blog optimisation</li>
                                     <li class="hero-list-item">Instagram content and story assets</li>
                                     <li class="hero-list-item">Meta ads and EDM campaign creative</li>
@@ -493,6 +497,7 @@
                                     <li class="hero-list-item">Always-on content and brand consistency</li>
                                     <li class="hero-list-item">Performance creative that still looks premium</li>
                                     <li class="hero-list-item">Fast turnarounds with clean handover</li>
+                                    <li class="hero-list-item">Clean, conversion-led web builds with proper QA</li>
                                 </ul>
                             </div>
                         </div>
@@ -640,21 +645,10 @@
                 </div>
             </section>
 
-            <section id="studio" class="px-6 py-24 sm:px-12 border-t border-black scroll-mt-20">
-                <div class="max-w-6xl mx-auto py-20 text-center">
-                    <h2 class="text-3xl font-bold uppercase tracking-[0.4em] text-black/20">Studio Space</h2>
-                </div>
-            </section>
-
-            <section id="contact" class="px-6 py-24 sm:px-12 border-t border-black scroll-mt-20">
-                <div class="max-w-6xl mx-auto py-20 text-center">
-                    <h2 class="text-3xl font-bold uppercase tracking-[0.4em] text-black/20">Contact</h2>
-                </div>
-            </section>
         </main>
     </div>
 
-    <!-- Case Study Page (Static logic remains the same) -->
+    <!-- Case Study Page -->
     <div id="case-study-page" class="page-transition hidden-page fixed inset-0 z-50 bg-white overflow-y-auto">
         <nav class="sticky top-0 z-50 p-6 bg-white/80 backdrop-blur-md border-b border-black flex justify-between items-center">
             <button onclick="hideCaseStudy()" class="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest hover:translate-x-[-4px] transition-transform">
@@ -988,12 +982,10 @@
                     engagement: "400 NEW FOLLOWERS",
                     aspectClass: "aspect-[3/4]"
                 },
-                // Added Fidelity Check from Crude Routes
                 fidelity: {
                     main: "https://i.imgur.com/1JFblMb.jpeg", 
                     zoom: "https://i.imgur.com/hc8WxHu.png"   
                 },
-                // Added Production Pipeline from Crude Routes
                 assets: {
                     title: "Product images to use in campaign",
                     desc: "These are the base photos I used to build the campaign. I used the original studio shots of the pillows and composited them into the final scenes, ensuring the fabric details looked real without needing another location shoot for the specific pillows that lacked their own shots.",
@@ -1011,7 +1003,6 @@
                     { url: "https://i.imgur.com/XN1jXf0.jpeg", aspect: "aspect-[1/2.2]", scrollable: true },
                     { url: "https://i.imgur.com/uGmsdnp.jpeg", aspect: "aspect-[1/2.2]", scrollable: true }
                 ],
-                // Added Campaign Section matching Chrome Hearts
                 campaignTitle: "Campaign Rollout",
                 campaignDesc: "Extending the visual language across all digital touchpoints, ensuring a cohesive brand experience from social media to email marketing.",
                 campaignCollage: [
@@ -1178,7 +1169,6 @@
             const userCaption = document.getElementById('ig-username-caption');
             const profilePic = document.getElementById('ig-profile-pic');
 
-            // Reset all optional sections to hidden / empty first to prevent bleeding
             const optionalSections = [
                 'cs-fidelity-showcase', 'cs-assets-container', 'cs-timeline-container', 
                 'cs-campaign-section', 'cs-moodboard-section', 'cs-edm-section',
@@ -1188,23 +1178,19 @@
                 const el = document.getElementById(secId);
                 if(el) el.classList.add('hidden');
             });
-            // Clear fidelity images to prevent ghosting
             document.getElementById('cs-fidelity-main').src = "";
             document.getElementById('cs-fidelity-detail').src = "";
 
-            // Reset DOM Position of Campaign Section
             const rightCol = document.getElementById('cs-right-col');
             const campaignSection = document.getElementById('cs-campaign-section');
             const campaignCollage = document.getElementById('cs-campaign-collage');
             const gridLayout = document.getElementById('cs-grid-layout');
             
-            // Put campaign section back in right col by default to ensure clean state
             if (!rightCol.contains(campaignSection)) {
-                 // Insert before outcomes or at the end if outcomes is hidden
                  rightCol.appendChild(campaignSection);
             }
-            campaignSection.className = "hidden mb-24 space-y-8"; // Reset classes
-            campaignCollage.className = "grid grid-cols-12 gap-4"; // Reset grid
+            campaignSection.className = "hidden mb-24 space-y-8"; 
+            campaignCollage.className = "grid grid-cols-12 gap-4"; 
 
             if (data.showSocial && data.socialGallery) {
                 totalIgSlides = data.socialGallery.length;
@@ -1230,7 +1216,6 @@
             document.getElementById('cs-solution').innerText = data.solution;
             document.getElementById('cs-nav-title').innerText = data.title;
 
-            // Handle dynamic titles for the case study sections
             document.getElementById('cs-process-title').innerText = data.processTitle || "The Process";
             document.getElementById('cs-result-title').innerText = data.resultTitle || "The Result";
 
@@ -1296,24 +1281,20 @@
                 edmBadge.className = "hidden";
                 if(moodboardBadge) moodboardBadge.classList.add('hidden');
                 
-                // Chrome Hearts Specific Order:
                 leftCol.appendChild(moodboardSection);
                 leftCol.appendChild(assetsContainer);
                 rightCol.appendChild(edmSection);
                 
-                // Hide Fidelity and Timeline for Chrome Hearts
                 fidelityShowcase.classList.add('hidden');
                 timelineContainer.classList.add('hidden');
                 
-                // Just ensure campaign section is unhidden here; layout logic happens in generic block or below
                 campaignSection.classList.remove('hidden');
             } else {
                 moodboardTitle.innerText = "Visual Moodboard";
                 campaignSection.classList.add('hidden');
-                campaignSection.className = "hidden mb-24 space-y-8"; // Reset
-                campaignCollage.className = "grid grid-cols-12 gap-4"; // Reset to grid
+                campaignSection.className = "hidden mb-24 space-y-8"; 
+                campaignCollage.className = "grid grid-cols-12 gap-4"; 
                 
-                // Reset positions for other projects
                 leftCol.appendChild(assetsContainer);
                 rightCol.insertBefore(moodboardSection, document.getElementById('cs-outcomes-container'));
                 rightCol.insertBefore(edmSection, document.getElementById('cs-outcomes-container'));
@@ -1323,7 +1304,6 @@
                     document.getElementById('cs-fidelity-main').src = data.fidelity.main;
                     document.getElementById('cs-fidelity-detail').src = data.fidelity.zoom;
                     
-                    // Logic to reposition fidelity box for Utopia Goods (aura)
                     const fidelityBox = document.getElementById('fidelity-box');
                     if (fidelityBox) {
                         if (id === 'aura') {
@@ -1345,13 +1325,9 @@
                 if (data.assets) assetsTitle.innerText = data.assets.title;
             }
 
-            // GENERIC CAMPAIGN COLLAGE LOGIC (Handles Chrome Hearts AND Utopia Goods)
             if (data.campaignCollage && data.campaignCollage.length > 0) {
                 campaignSection.classList.remove('hidden');
                 
-                // Positioning logic:
-                // For Utopia Goods (aura), place at the very bottom (after gallery)
-                // For Chrome Hearts, keep at the bottom of the grid layout (before gallery)
                 if (id === 'aura') {
                     const gallery = document.getElementById('cs-gallery');
                     gallery.after(campaignSection);
@@ -1361,7 +1337,6 @@
                 
                 campaignSection.className = "mb-24 w-full"; 
 
-                // Set Titles - Logic to preserve Chrome Hearts original text vs Dynamic Utopia Goods text
                 if (id === 'chrome_hearts') {
                      document.getElementById('cs-campaign-title').innerText = "Step 2: Campaign Creation";
                      document.getElementById('cs-campaign-desc').innerHTML = `Beyond product shots, I produced full campaign imagery using <span class="text-black font-bold">AI</span> to place the eyewear within high-fashion lifestyle contexts. These assets mirror the brand's iconic grit and attitude through complex model compositions.`;
@@ -1370,7 +1345,6 @@
                      document.getElementById('cs-campaign-desc').innerHTML = data.campaignDesc || "";
                 }
 
-                // Render Grid
                 campaignCollage.innerHTML = `
                     <div class="col-span-12 md:col-span-7 border border-black bg-neutral-100 aspect-video md:aspect-[4/3] overflow-hidden cursor-pointer group" onclick="openAssetPreview(caseStudies['${id}'].campaignCollage, 0)">
                         <img src="${data.campaignCollage[0]}" class="w-full h-full object-cover transition-all duration-700">
