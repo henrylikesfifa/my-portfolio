@@ -423,8 +423,8 @@
 
                 <div class="text-right">
                     <h1 class="hero-title text-6xl md:text-8xl lg:text-9xl font-semibold text-black">
-                        <span class="block uppercase">The Future</span>
-                        <span class="block text-neutral-200 uppercase">Of Design</span>
+                        <span class="block uppercase">Designed</span>
+                        <span class="block text-neutral-200 uppercase">For Growth</span>
                     </h1>
                     <p class="text-xl md:text-2xl text-neutral-400 font-medium mt-4 tracking-tight font-mono-custom italic">EST. 2003</p>
                 </div>
@@ -799,12 +799,13 @@
                             <div class="border border-black bg-neutral-100 aspect-[3/4] overflow-hidden">
                                 <img id="cs-fidelity-main" src="" alt="Main Campaign Shoot" class="w-full h-full object-cover">
                             </div>
-                            <div class="absolute -bottom-6 -right-6 md:-right-12 w-1/2 max-w-[240px] fidelity-detail border-2 border-black bg-white z-10 overflow-hidden aspect-square flex flex-col">
+                            <div id="fidelity-box" onclick="openFidelityZoom()" class="absolute -bottom-6 -right-6 md:-right-12 w-1/2 max-w-[240px] fidelity-detail border-2 border-black bg-white z-10 overflow-hidden aspect-square flex flex-col cursor-pointer hover:scale-[1.02] transition-transform" title="Click to Expand">
                                 <div class="flex-1 overflow-hidden bg-neutral-100">
                                     <img id="cs-fidelity-detail" src="" alt="Fidelity Detail" class="w-full h-full object-cover scale-[1.1]">
                                 </div>
-                                <div class="bg-black p-3">
+                                <div class="bg-black p-3 flex justify-between items-center">
                                     <span class="text-[8px] font-black text-white uppercase tracking-widest">1:1 Zoom</span>
+                                    <i data-lucide="maximize-2" class="w-3 h-3 text-white"></i>
                                 </div>
                             </div>
                         </div>
@@ -887,6 +888,7 @@
         let totalIgSlides = 3;
         let activeAssetList = [];
         let activeAssetIndex = 0;
+        let activeCaseStudyId = null;
 
         function updateIgSlide() {
             const carousel = document.getElementById('ig-carousel');
@@ -986,6 +988,22 @@
                     engagement: "400 NEW FOLLOWERS",
                     aspectClass: "aspect-[3/4]"
                 },
+                // Added Fidelity Check from Crude Routes
+                fidelity: {
+                    main: "https://i.imgur.com/1JFblMb.jpeg", 
+                    zoom: "https://i.imgur.com/hc8WxHu.png"   
+                },
+                // Added Production Pipeline from Crude Routes
+                assets: {
+                    title: "Product images to use in campaign",
+                    desc: "These are the base photos I used to build the campaign. I used the original studio shots of the pillows and composited them into the final scenes, ensuring the fabric details looked real without needing another location shoot for the specific pillows that lacked their own shots.",
+                    items: [
+                        { url: "https://i.imgur.com/7xEpRlx.png", label: "Front Profile" },
+                        { url: "https://i.imgur.com/hZmLTFl.png", label: "Spec Detail" },
+                        { url: "https://i.imgur.com/JSBRAOd.png", label: "Sample A" },
+                        { url: "https://i.imgur.com/HZvbGN3.png", label: "Sample B" }
+                    ]
+                },
                 showEdm: true,
                 edms: [
                     { url: "https://i.imgur.com/sww6Lvg.jpeg", aspect: "aspect-[1/2.2]", scrollable: true },
@@ -993,10 +1011,18 @@
                     { url: "https://i.imgur.com/XN1jXf0.jpeg", aspect: "aspect-[1/2.2]", scrollable: true },
                     { url: "https://i.imgur.com/uGmsdnp.jpeg", aspect: "aspect-[1/2.2]", scrollable: true }
                 ],
-                gallery: [
-                    { url: "https://images.unsplash.com/photo-1616627781431-23b776ace7b2?w=1200&q=80", style: "aspect-square" },
-                    { url: "https://images.unsplash.com/photo-1551488831-00ddcb6c6bd3?w=1200&q=80", style: "aspect-square" },
-                    { url: "https://images.unsplash.com/photo-1594913785162-e6786b02dbaa?w=1200&q=80", style: "aspect-square" }
+                // Added Campaign Section matching Chrome Hearts
+                campaignTitle: "Campaign Rollout",
+                campaignDesc: "Extending the visual language across all digital touchpoints, ensuring a cohesive brand experience from social media to email marketing.",
+                campaignCollage: [
+                    "https://i.imgur.com/ZZJoY8R.jpeg",
+                    "https://i.imgur.com/5lZJjY8.jpeg",
+                    "https://i.imgur.com/L2DIMzp.jpeg",
+                    "https://i.imgur.com/nquIaV9.jpeg",
+                    "https://i.imgur.com/0Fn2SS8.jpeg",
+                    "https://i.imgur.com/nrOd2ix.jpeg",
+                    "https://i.imgur.com/4QBV7bp.jpeg",
+                    "https://i.imgur.com/ILEUsWA.jpeg"
                 ]
             },
             chrome_hearts: {
@@ -1017,10 +1043,6 @@
                     "https://i.imgur.com/wDbxBt4.png",
                     "https://images.unsplash.com/photo-1473496169904-658ba7c44d8a?w=800&q=80"
                 ],
-                fidelity: {
-                    main: "https://i.imgur.com/9frRN0E.jpeg", 
-                    zoom: "https://i.imgur.com/9frRN0E.jpeg"   
-                },
                 showEdm: true,
                 edmCustomLabels: {
                     title: "EXAMPLE EDM CONCEPT BY ME",
@@ -1065,9 +1087,9 @@
                     ]
                 },
                 gallery: [
-                    { url: "https://images.unsplash.com/photo-1511499767150-a48a237f0083?w=800&q=80", style: "aspect-[5/4]" },
-                    { url: "https://images.unsplash.com/photo-1577803645773-f96470509666?w=800&q=80", style: "aspect-[3/4]" },
-                    { url: "https://images.unsplash.com/photo-1473496169904-658ba7c44d8a?w=800&q=80", style: "aspect-[3/4]" }
+                    { url: "https://i.imgur.com/8EyiSYA.jpeg", style: "aspect-[5/4]" },
+                    { url: "https://i.imgur.com/3rWMmfJ.jpeg", style: "aspect-[3/4]" },
+                    { url: "https://i.imgur.com/W3wI25e.png", style: "aspect-[3/4]" }
                 ]
             }
         };
@@ -1131,7 +1153,19 @@
             document.getElementById('asset-overlay').classList.remove('active');
         }
 
+        function openFidelityZoom() {
+            if (!activeCaseStudyId) return;
+            const data = caseStudies[activeCaseStudyId];
+            if (data && data.fidelity && data.fidelity.zoom) {
+                openAssetPreview([{
+                    url: data.fidelity.zoom,
+                    label: "1:1 Fidelity Zoom"
+                }], 0);
+            }
+        }
+
         function showCaseStudy(id) {
+            activeCaseStudyId = id;
             const data = caseStudies[id];
             if (!data) return;
 
@@ -1158,6 +1192,19 @@
             document.getElementById('cs-fidelity-main').src = "";
             document.getElementById('cs-fidelity-detail').src = "";
 
+            // Reset DOM Position of Campaign Section
+            const rightCol = document.getElementById('cs-right-col');
+            const campaignSection = document.getElementById('cs-campaign-section');
+            const campaignCollage = document.getElementById('cs-campaign-collage');
+            const gridLayout = document.getElementById('cs-grid-layout');
+            
+            // Put campaign section back in right col by default to ensure clean state
+            if (!rightCol.contains(campaignSection)) {
+                 // Insert before outcomes or at the end if outcomes is hidden
+                 rightCol.appendChild(campaignSection);
+            }
+            campaignSection.className = "hidden mb-24 space-y-8"; // Reset classes
+            campaignCollage.className = "grid grid-cols-12 gap-4"; // Reset grid
 
             if (data.showSocial && data.socialGallery) {
                 totalIgSlides = data.socialGallery.length;
@@ -1194,12 +1241,8 @@
             const assetsContainer = document.getElementById('cs-assets-container');
             const assetsGrid = document.getElementById('cs-assets-grid');
             const assetsDesc = document.getElementById('cs-assets-desc');
-            const campaignSection = document.getElementById('cs-campaign-section');
-            const campaignCollage = document.getElementById('cs-campaign-collage');
             const fidelityShowcase = document.getElementById('cs-fidelity-showcase');
             const leftCol = document.getElementById('cs-left-col');
-            const rightCol = document.getElementById('cs-right-col');
-            const gridLayout = document.getElementById('cs-grid-layout');
             const timelineContainer = document.getElementById('cs-timeline-container');
             const timelineTitle = document.getElementById('cs-timeline-title');
             const moodboardSection = document.getElementById('cs-moodboard-section');
@@ -1258,65 +1301,12 @@
                 leftCol.appendChild(assetsContainer);
                 rightCol.appendChild(edmSection);
                 
-                // Move Campaign Section to Bottom (Full Width)
-                gridLayout.after(campaignSection);
-                campaignSection.className = "mb-24 w-full"; // Ensure full width
-                
                 // Hide Fidelity and Timeline for Chrome Hearts
                 fidelityShowcase.classList.add('hidden');
                 timelineContainer.classList.add('hidden');
                 
+                // Just ensure campaign section is unhidden here; layout logic happens in generic block or below
                 campaignSection.classList.remove('hidden');
-                campaignCollage.innerHTML = `
-                    <div class="col-span-12 md:col-span-7 border border-black bg-neutral-100 aspect-video md:aspect-[4/3] overflow-hidden cursor-pointer group" onclick="openAssetPreview(caseStudies['${id}'].campaignCollage, 0)">
-                        <img src="${data.campaignCollage[0]}" class="w-full h-full object-cover transition-all duration-700">
-                    </div>
-                    <div class="col-span-6 md:col-span-5 border border-black bg-neutral-100 aspect-square overflow-hidden cursor-pointer group" onclick="openAssetPreview(caseStudies['${id}'].campaignCollage, 1)">
-                        <img src="${data.campaignCollage[1]}" class="w-full h-full object-cover transition-all duration-700">
-                    </div>
-                    <div class="col-span-6 md:col-span-4 border border-black bg-neutral-100 aspect-[3/4] overflow-hidden cursor-pointer group" onclick="openAssetPreview(caseStudies['${id}'].campaignCollage, 2)">
-                        <img src="${data.campaignCollage[2]}" class="w-full h-full object-cover transition-all duration-700">
-                    </div>
-                    <div class="col-span-12 md:col-span-8 border border-black bg-neutral-100 aspect-video overflow-hidden cursor-pointer group" onclick="openAssetPreview(caseStudies['${id}'].campaignCollage, 3)">
-                        <img src="${data.campaignCollage[3]}" class="w-full h-full object-cover transition-all duration-700">
-                    </div>
-                    <div class="col-span-6 border border-black bg-neutral-100 aspect-square overflow-hidden cursor-pointer group" onclick="openAssetPreview(caseStudies['${id}'].campaignCollage, 4)">
-                        <img src="${data.campaignCollage[4]}" class="w-full h-full object-cover transition-all duration-700">
-                    </div>
-                    <div class="col-span-6 border border-black bg-neutral-100 aspect-square overflow-hidden cursor-pointer group" onclick="openAssetPreview(caseStudies['${id}'].campaignCollage, 5)">
-                        <img src="${data.campaignCollage[5]}" class="w-full h-full object-cover transition-all duration-700">
-                    </div>
-                    
-                    <!-- Expanded Grid for New Assets -->
-                    <div class="col-span-12 border border-black bg-neutral-100 aspect-video overflow-hidden cursor-pointer group" onclick="openAssetPreview(caseStudies['${id}'].campaignCollage, 6)">
-                        <img src="${data.campaignCollage[6]}" class="w-full h-full object-cover transition-all duration-700">
-                    </div>
-                    
-                    <div class="col-span-6 md:col-span-5 border border-black bg-neutral-100 aspect-[4/5] overflow-hidden cursor-pointer group" onclick="openAssetPreview(caseStudies['${id}'].campaignCollage, 7)">
-                        <img src="${data.campaignCollage[7]}" class="w-full h-full object-cover transition-all duration-700">
-                    </div>
-                    <div class="col-span-6 md:col-span-7 border border-black bg-neutral-100 aspect-[4/3] overflow-hidden cursor-pointer group" onclick="openAssetPreview(caseStudies['${id}'].campaignCollage, 8)">
-                        <img src="${data.campaignCollage[8]}" class="w-full h-full object-cover transition-all duration-700">
-                    </div>
-
-                    <div class="col-span-6 border border-black bg-neutral-100 aspect-square overflow-hidden cursor-pointer group" onclick="openAssetPreview(caseStudies['${id}'].campaignCollage, 9)">
-                        <img src="${data.campaignCollage[9]}" class="w-full h-full object-cover transition-all duration-700">
-                    </div>
-                    <div class="col-span-6 border border-black bg-neutral-100 aspect-square overflow-hidden cursor-pointer group" onclick="openAssetPreview(caseStudies['${id}'].campaignCollage, 10)">
-                        <img src="${data.campaignCollage[10]}" class="w-full h-full object-cover transition-all duration-700">
-                    </div>
-
-                    <div class="col-span-12 md:col-span-8 border border-black bg-neutral-100 aspect-video overflow-hidden cursor-pointer group" onclick="openAssetPreview(caseStudies['${id}'].campaignCollage, 11)">
-                        <img src="${data.campaignCollage[11]}" class="w-full h-full object-cover transition-all duration-700">
-                    </div>
-                    <div class="col-span-12 md:col-span-4 border border-black bg-neutral-100 aspect-square overflow-hidden cursor-pointer group" onclick="openAssetPreview(caseStudies['${id}'].campaignCollage, 12)">
-                        <img src="${data.campaignCollage[12]}" class="w-full h-full object-cover transition-all duration-700">
-                    </div>
-                `;
-
-                edmGrid.className = "flex flex-col items-center w-full";
-                assetsGrid.className = "grid grid-cols-2 gap-3 mb-12";
-                assetsTitle.innerHTML = `STUDIO CONTENT MADE WITH AI <span class="ml-2 text-[8px] text-neutral-400 font-bold tracking-widest uppercase align-middle">— Click to view full image</span>`;
             } else {
                 moodboardTitle.innerText = "Visual Moodboard";
                 campaignSection.classList.add('hidden');
@@ -1332,6 +1322,19 @@
                     fidelityShowcase.classList.remove('hidden');
                     document.getElementById('cs-fidelity-main').src = data.fidelity.main;
                     document.getElementById('cs-fidelity-detail').src = data.fidelity.zoom;
+                    
+                    // Logic to reposition fidelity box for Utopia Goods (aura)
+                    const fidelityBox = document.getElementById('fidelity-box');
+                    if (fidelityBox) {
+                        if (id === 'aura') {
+                            fidelityBox.classList.remove('-bottom-6', '-right-6', 'md:-right-12');
+                            fidelityBox.classList.add('top-4', 'right-4');
+                        } else {
+                            fidelityBox.classList.add('-bottom-6', '-right-6', 'md:-right-12');
+                            fidelityBox.classList.remove('top-4', 'right-4');
+                        }
+                    }
+                    
                     rightCol.appendChild(fidelityShowcase);
                 } else {
                     fidelityShowcase.classList.add('hidden');
@@ -1340,6 +1343,89 @@
                 edmGrid.className = "grid grid-cols-1 md:grid-cols-2 gap-8";
                 assetsGrid.className = "grid grid-cols-2 gap-3 mb-12";
                 if (data.assets) assetsTitle.innerText = data.assets.title;
+            }
+
+            // GENERIC CAMPAIGN COLLAGE LOGIC (Handles Chrome Hearts AND Utopia Goods)
+            if (data.campaignCollage && data.campaignCollage.length > 0) {
+                campaignSection.classList.remove('hidden');
+                
+                // Positioning logic:
+                // For Utopia Goods (aura), place at the very bottom (after gallery)
+                // For Chrome Hearts, keep at the bottom of the grid layout (before gallery)
+                if (id === 'aura') {
+                    const gallery = document.getElementById('cs-gallery');
+                    gallery.after(campaignSection);
+                } else {
+                    gridLayout.after(campaignSection);
+                }
+                
+                campaignSection.className = "mb-24 w-full"; 
+
+                // Set Titles - Logic to preserve Chrome Hearts original text vs Dynamic Utopia Goods text
+                if (id === 'chrome_hearts') {
+                     document.getElementById('cs-campaign-title').innerText = "Step 2: Campaign Creation";
+                     document.getElementById('cs-campaign-desc').innerHTML = `Beyond product shots, I produced full campaign imagery using <span class="text-black font-bold">AI</span> to place the eyewear within high-fashion lifestyle contexts. These assets mirror the brand's iconic grit and attitude through complex model compositions.`;
+                } else {
+                     document.getElementById('cs-campaign-title').innerText = data.campaignTitle || "Campaign Creation";
+                     document.getElementById('cs-campaign-desc').innerHTML = data.campaignDesc || "";
+                }
+
+                // Render Grid
+                campaignCollage.innerHTML = `
+                    <div class="col-span-12 md:col-span-7 border border-black bg-neutral-100 aspect-video md:aspect-[4/3] overflow-hidden cursor-pointer group" onclick="openAssetPreview(caseStudies['${id}'].campaignCollage, 0)">
+                        <img src="${data.campaignCollage[0]}" class="w-full h-full object-cover transition-all duration-700">
+                    </div>
+                    <div class="col-span-6 md:col-span-5 border border-black bg-neutral-100 aspect-square overflow-hidden cursor-pointer group" onclick="openAssetPreview(caseStudies['${id}'].campaignCollage, 1)">
+                        <img src="${data.campaignCollage[1]}" class="w-full h-full object-cover transition-all duration-700">
+                    </div>
+                    <div class="col-span-6 md:col-span-4 border border-black bg-neutral-100 aspect-[3/4] overflow-hidden cursor-pointer group" onclick="openAssetPreview(caseStudies['${id}'].campaignCollage, 2)">
+                        <img src="${data.campaignCollage[2]}" class="w-full h-full object-cover transition-all duration-700">
+                    </div>
+                    <div class="col-span-12 md:col-span-8 border border-black bg-neutral-100 aspect-[3/2] overflow-hidden cursor-pointer group" onclick="openAssetPreview(caseStudies['${id}'].campaignCollage, 3)">
+                        <img src="${data.campaignCollage[3]}" class="w-full h-full object-cover transition-all duration-700">
+                    </div>
+                    <div class="col-span-6 border border-black bg-neutral-100 aspect-square overflow-hidden cursor-pointer group" onclick="openAssetPreview(caseStudies['${id}'].campaignCollage, 4)">
+                        <img src="${data.campaignCollage[4]}" class="w-full h-full object-cover transition-all duration-700">
+                    </div>
+                    <div class="col-span-6 border border-black bg-neutral-100 aspect-square overflow-hidden cursor-pointer group" onclick="openAssetPreview(caseStudies['${id}'].campaignCollage, 5)">
+                        <img src="${data.campaignCollage[5]}" class="w-full h-full object-cover transition-all duration-700">
+                    </div>
+                    
+                    ${data.campaignCollage[6] ? `
+                    <div class="${id === 'aura' ? 'col-span-12 md:col-span-6' : 'col-span-12'} border border-black bg-neutral-100 ${id === 'aura' ? 'aspect-[4/5]' : 'aspect-video'} overflow-hidden cursor-pointer group" onclick="openAssetPreview(caseStudies['${id}'].campaignCollage, 6)">
+                        <img src="${data.campaignCollage[6]}" class="w-full h-full object-cover transition-all duration-700">
+                    </div>` : ''}
+                    
+                    ${data.campaignCollage[7] ? `
+                    <div class="${id === 'aura' ? 'col-span-12 md:col-span-6' : 'col-span-6 md:col-span-5'} border border-black bg-neutral-100 ${id === 'aura' ? 'aspect-[4/5]' : 'aspect-[4/5]'} overflow-hidden cursor-pointer group" onclick="openAssetPreview(caseStudies['${id}'].campaignCollage, 7)">
+                        <img src="${data.campaignCollage[7]}" class="w-full h-full object-cover transition-all duration-700">
+                    </div>` : ''}
+                    
+                    ${data.campaignCollage[8] ? `
+                    <div class="col-span-6 md:col-span-7 border border-black bg-neutral-100 aspect-[4/3] overflow-hidden cursor-pointer group" onclick="openAssetPreview(caseStudies['${id}'].campaignCollage, 8)">
+                        <img src="${data.campaignCollage[8]}" class="w-full h-full object-cover transition-all duration-700">
+                    </div>` : ''}
+
+                    ${data.campaignCollage[9] ? `
+                    <div class="col-span-6 border border-black bg-neutral-100 aspect-square overflow-hidden cursor-pointer group" onclick="openAssetPreview(caseStudies['${id}'].campaignCollage, 9)">
+                        <img src="${data.campaignCollage[9]}" class="w-full h-full object-cover transition-all duration-700">
+                    </div>` : ''}
+                    
+                    ${data.campaignCollage[10] ? `
+                    <div class="col-span-6 border border-black bg-neutral-100 aspect-square overflow-hidden cursor-pointer group" onclick="openAssetPreview(caseStudies['${id}'].campaignCollage, 10)">
+                        <img src="${data.campaignCollage[10]}" class="w-full h-full object-cover transition-all duration-700">
+                    </div>` : ''}
+
+                    ${data.campaignCollage[11] ? `
+                    <div class="col-span-12 md:col-span-8 border border-black bg-neutral-100 aspect-video overflow-hidden cursor-pointer group" onclick="openAssetPreview(caseStudies['${id}'].campaignCollage, 11)">
+                        <img src="${data.campaignCollage[11]}" class="w-full h-full object-cover transition-all duration-700">
+                    </div>` : ''}
+                    
+                    ${data.campaignCollage[12] ? `
+                    <div class="col-span-12 md:col-span-4 border border-black bg-neutral-100 aspect-square overflow-hidden cursor-pointer group" onclick="openAssetPreview(caseStudies['${id}'].campaignCollage, 12)">
+                        <img src="${data.campaignCollage[12]}" class="w-full h-full object-cover transition-all duration-700">
+                    </div>` : ''}
+                `;
             }
 
             if(data.showEdm && data.edms) {
