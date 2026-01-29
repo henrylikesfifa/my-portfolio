@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-    <title>faux.moni — Portfolio</title>
+    <title>HENRY SLORACH — Portfolio</title>
     <meta name="description" content="Designer portfolio landing page recreated with a sharp, squared-off aesthetic and dynamic case studies.">
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -192,6 +192,184 @@
             background: #ffffff;
             border: 1px solid #000000;
         }
+
+        /* Hero Section Styling */
+        .hero-section {
+            padding-top: 6rem;
+            padding-bottom: 8rem;
+        }
+        .hero-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 4rem;
+            align-items: start;
+        }
+        @media (min-width: 1024px) {
+            .hero-grid {
+                grid-template-columns: repeat(12, 1fr);
+                gap: 4rem;
+            }
+        }
+        .hero-sidebar {
+            grid-column: span 1;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        @media (min-width: 1024px) {
+            .hero-sidebar {
+                grid-column: span 4;
+            }
+        }
+        .hero-image-wrapper {
+            width: 100%;
+            aspect-ratio: 4/5;
+            overflow: hidden;
+            border-radius: 2px;
+            background: #f5f5f5;
+        }
+        .hero-cta {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1.25rem 1.5rem;
+            background: #000;
+            color: #fff;
+            text-decoration: none;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            transition: opacity 0.3s ease;
+            border-radius: 2px;
+        }
+        .hero-cta:hover {
+            opacity: 0.9;
+        }
+        
+        /* Tools Block Styling */
+        .hero-tools-container {
+            margin-top: 1rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid #e5e5e5;
+        }
+        .hero-tools-heading {
+            font-size: 9px;
+            font-weight: 800;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: #999;
+            margin-bottom: 1rem;
+        }
+        .hero-tools-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+        .hero-tool-chip {
+            font-size: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            padding: 6px 10px;
+            background: #f7f7f7;
+            color: #444;
+            border-radius: 2px;
+        }
+
+        .hero-main {
+            grid-column: span 1;
+            display: flex;
+            flex-direction: column;
+        }
+        @media (min-width: 1024px) {
+            .hero-main {
+                grid-column: span 8;
+            }
+        }
+        .hero-meta {
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.25em;
+            color: #000;
+            margin-bottom: 1.5rem;
+            display: block;
+        }
+        .hero-headline {
+            font-size: clamp(2.5rem, 5vw, 4.5rem);
+            font-weight: 700;
+            line-height: 0.95;
+            letter-spacing: -0.04em;
+            text-transform: uppercase;
+            margin-bottom: 2.5rem;
+        }
+        .hero-paragraph {
+            font-size: 1.125rem;
+            line-height: 1.6;
+            color: #555;
+            margin-bottom: 4rem;
+            max-width: 680px;
+        }
+
+        /* NEW LISTS LAYOUT - PANELS */
+        .hero-lists {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+            align-items: stretch;
+        }
+        @media (min-width: 768px) {
+            .hero-lists {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+        .hero-list-panel {
+            background-color: #fafafa; /* Subtle tint as requested */
+            padding: 2.5rem;
+            border-radius: 2px;
+            display: flex;
+            flex-direction: column;
+            height: 100%; /* Stretch to fill grid cell */
+        }
+        .hero-list-title {
+            font-size: 15px; /* Larger than list items */
+            font-weight: 900;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            margin-bottom: 1.5rem;
+            color: #000; /* Fully opaque black */
+            opacity: 1;
+        }
+        .hero-list-ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 0.85rem;
+        }
+        .hero-list-item {
+            font-size: 13px; /* Smaller than title */
+            line-height: 1.6;
+            color: #000; /* Consistent black */
+            font-weight: 500;
+            position: relative;
+            padding-left: 1.25rem;
+        }
+        @media (min-width: 1024px) {
+            .hero-list-item {
+                font-size: 14px; /* Responsive size adjustment */
+            }
+        }
+        .hero-list-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0.6em;
+            width: 5px;
+            height: 1px;
+            background: #000; /* Consistent black */
+        }
     </style>
 </head>
 <body class="text-neutral-900 antialiased selection:bg-neutral-900 selection:text-white">
@@ -224,19 +402,19 @@
     <div id="home-page" class="page-transition active-page">
         <header class="relative w-full h-screen flex flex-col justify-between p-6 sm:p-12 z-10 pointer-events-none">
             <div class="flex justify-between items-start pointer-events-auto w-full max-w-7xl mx-auto">
-                <div class="text-xl font-bold tracking-tighter text-black uppercase">faux.moni</div>
+                <div class="text-xl font-bold tracking-tighter text-black uppercase">HENRY SLORACH</div>
                 <nav class="hidden sm:flex gap-10 text-[10px] font-bold text-neutral-400 uppercase tracking-[0.3em]">
                     <button onclick="navToSection('about')" class="hover:text-black transition-colors uppercase">about</button>
                     <button onclick="navToSection('work')" class="hover:text-black transition-colors uppercase">work</button>
-                    <button onclick="navToSection('studio')" class="hover:text-black transition-colors uppercase">studio</button>
-                    <button onclick="navToSection('contact')" class="hover:text-black transition-colors uppercase">contact</button>
+                    <button onclick="navToSection('tenure')" class="hover:text-black transition-colors uppercase">tenure</button>
+                    <a href="mailto:henryslorach@gmail.com" class="hover:text-black transition-colors uppercase">contact</a>
                 </nav>
             </div>
 
             <div class="flex flex-col md:flex-row justify-between items-end gap-12 pointer-events-auto w-full max-w-7xl mx-auto mb-4">
                 <div class="max-w-xs space-y-8 mb-4 md:mb-0">
                     <p class="text-sm leading-relaxed text-neutral-500 font-medium border-l-2 border-black pl-4">
-                        building things in berlin. design, code, and whatever else feels right.
+                        Ecommerce all-rounder based in Sydney. Shopify, marketing creative, and organic growth.
                     </p>
                     <button onclick="navToSection('work')" class="group flex items-center gap-2 text-[10px] font-bold tracking-[0.2em] uppercase border border-black p-4 hover:bg-black hover:text-white transition-all cursor-pointer">
                         View Projects <i data-lucide="arrow-down" class="w-3 h-3 group-hover:translate-y-1 transition-transform"></i>
@@ -254,54 +432,72 @@
         </header>
 
         <main id="main-content" class="relative z-20 bg-white">
-            <section id="about" class="px-6 py-24 sm:px-12 border-t border-black scroll-mt-20">
-                <div class="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-24 items-stretch">
-                    <div class="lg:col-span-5 flex flex-col justify-between order-2 lg:order-1">
-                        <div class="relative bg-neutral-100 border border-black aspect-[4/5] overflow-hidden">
-                            <img src="https://i.imgur.com/Knm26si.jpeg" alt="Portrait" class="w-full h-full object-cover object-[50%_20%]">
+            
+            <!-- REDESIGNED HERO SECTION -->
+            <section id="about" class="hero-section px-6 sm:px-12 border-t border-black scroll-mt-20">
+                <div class="max-w-6xl mx-auto hero-grid">
+                    
+                    <!-- Left Sidebar -->
+                    <aside class="hero-sidebar">
+                        <div class="hero-image-wrapper">
+                            <img src="https://i.imgur.com/Knm26si.jpeg" alt="Henry Slorach Portrait" class="w-full h-full object-cover object-[50%_20%]">
                         </div>
-                        <div class="mt-8 flex justify-center">
-                            <a href="mailto:hello@fauxmoni.com" class="group relative flex w-1/2 items-center justify-between px-6 py-5 bg-black text-white border border-black transition-all hover:bg-neutral-900 overflow-hidden">
-                                <div class="flex flex-col gap-0">
-                                    <span class="text-[8px] font-bold uppercase tracking-[0.2em] text-neutral-400 leading-none mb-1">Status</span>
-                                    <span class="text-sm font-bold uppercase tracking-tight">Hit me up</span>
-                                </div>
-                                <i data-lucide="arrow-up-right" class="w-4 h-4 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform"></i>
-                                <div class="absolute inset-0 bg-neutral-800 translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="lg:col-span-7 flex flex-col justify-between order-1 lg:order-2">
-                        <div class="space-y-12">
-                            <div class="space-y-6">
-                                <div class="inline-block px-3 py-1 border border-black text-[10px] font-bold uppercase tracking-widest text-black">Profile — 01</div>
-                                <h2 class="text-5xl md:text-7xl font-semibold tracking-tighter uppercase leading-[0.9]">Design Engineer</h2>
-                                <p class="text-xl text-neutral-500 leading-relaxed font-mono-custom max-w-xl">
-                                    I design and build digital products that actually work. I handle the UI systems and then write the code to make it real. Fast, clean, and cool.
-                                </p>
+                        <a href="mailto:henryslorach@gmail.com" class="hero-cta">
+                            <div class="flex items-center gap-3">
+                                <i data-lucide="mail" class="w-4 h-4"></i>
+                                <span class="lowercase tracking-widest">henryslorach@gmail.com</span>
                             </div>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 border-t border-black pt-12 pb-1">
-                                <div>
-                                    <h3 class="text-[10px] font-bold uppercase text-neutral-400 tracking-[0.2em] mb-6">Stuff I do</h3>
-                                    <ul class="space-y-3 font-mono-custom text-sm font-medium">
-                                        <li class="flex items-center gap-3"><div class="w-2 h-2 bg-black"></div> UI/UX Design</li>
-                                        <li class="flex items-center gap-3"><div class="w-2 h-2 bg-black"></div> Front-End Dev</li>
-                                        <li class="flex items-center gap-3"><div class="w-2 h-2 bg-black"></div> Design Systems</li>
-                                        <li class="flex items-center gap-3"><div class="w-2 h-2 bg-black"></div> Visual Identity</li>
-                                    </ul>
-                                </div>
-                                <div>
-                                    <h3 class="text-[10px] font-bold uppercase text-neutral-400 tracking-[0.2em] mb-6">Focus</h3>
-                                    <ul class="space-y-3 font-mono-custom text-sm font-medium">
-                                        <li class="flex items-center gap-3"><div class="w-2 h-2 border border-black"></div> Tech & SaaS</li>
-                                        <li class="flex items-center gap-3"><div class="w-2 h-2 border border-black"></div> Creative Agencies</li>
-                                        <li class="flex items-center gap-3"><div class="w-2 h-2 border border-black"></div> FinTech</li>
-                                        <li class="flex items-center gap-3"><div class="w-2 h-2 border border-black"></div> Luxury Brands</li>
-                                    </ul>
-                                </div>
+                            <i data-lucide="arrow-up-right" class="w-4 h-4"></i>
+                        </a>
+                        
+                        <!-- New Tools Block -->
+                        <div class="hero-tools-container">
+                            <h4 class="hero-tools-heading">TOOLS</h4>
+                            <div class="hero-tools-chips">
+                                <span class="hero-tool-chip">Shopify</span>
+                                <span class="hero-tool-chip">Klaviyo</span>
+                                <span class="hero-tool-chip">Adobe (Photoshop/Illustrator)</span>
+                                <span class="hero-tool-chip">Canva</span>
+                                <span class="hero-tool-chip">Meta Ads</span>
+                                <span class="hero-tool-chip">Midjourney</span>
+                                <span class="hero-tool-chip">Nano Banana</span>
+                                <span class="hero-tool-chip">Notion</span>
+                                <span class="hero-tool-chip">Excel</span>
                             </div>
                         </div>
+                    </aside>
+
+                    <!-- Right Main Content -->
+                    <div class="hero-main">
+                        <span class="hero-meta">POSITIONING — 01</span>
+                        <h2 class="hero-headline">ECOMMERCE CREATIVE + GROWTH</h2>
+                        <p class="hero-paragraph">
+                            I run the creative and site updates that keep ecommerce brands moving. Shopify edits, clean on-page SEO, and content that matches the brand voice. From Instagram posts to Meta ads and EDMs, I build a consistent look across the full funnel.
+                        </p>
+
+                        <!-- Equal Height Panels Grid -->
+                        <div class="hero-lists">
+                            <div class="hero-list-panel">
+                                <h3 class="hero-list-title">WHAT I MAKE AND MANAGE</h3>
+                                <ul class="hero-list-ul">
+                                    <li class="hero-list-item">Shopify updates and landing pages</li>
+                                    <li class="hero-list-item">SEO clean-up and blog optimisation</li>
+                                    <li class="hero-list-item">Instagram content and story assets</li>
+                                    <li class="hero-list-item">Meta ads and EDM campaign creative</li>
+                                </ul>
+                            </div>
+                            <div class="hero-list-panel">
+                                <h3 class="hero-list-title">WHERE I ADD VALUE</h3>
+                                <ul class="hero-list-ul">
+                                    <li class="hero-list-item">Product drops and seasonal launches</li>
+                                    <li class="hero-list-item">Always-on content and brand consistency</li>
+                                    <li class="hero-list-item">Performance creative that still looks premium</li>
+                                    <li class="hero-list-item">Fast turnarounds with clean handover</li>
+                                </ul>
+                            </div>
+                        </div>
                     </div>
+
                 </div>
             </section>
 
@@ -380,6 +576,70 @@
                 </div>
             </section>
 
+            <section id="tenure" class="px-6 py-24 sm:px-12 border-t border-black scroll-mt-20 bg-neutral-50">
+                <div class="max-w-6xl mx-auto">
+                    <div class="flex flex-col md:flex-row justify-between items-start mb-20 gap-8">
+                        <div class="space-y-4">
+                            <div class="inline-block px-3 py-1 border border-black text-[10px] font-bold uppercase tracking-widest text-black">Commerce Tenure — 02</div>
+                            <h2 class="text-5xl md:text-7xl font-semibold tracking-tighter uppercase leading-[0.9]">Selected Experience</h2>
+                        </div>
+                        <p class="text-sm font-mono-custom text-neutral-500 max-w-xs border-l border-black pl-4">
+                            Operational tenure across luxury textiles, freelance agency work, and self-built ecommerce ventures.
+                        </p>
+                    </div>
+
+                    <div class="space-y-0 border-t border-black">
+                        <div class="grid grid-cols-1 lg:grid-cols-12 border-b border-black py-12 group hover:bg-white transition-colors">
+                            <div class="lg:col-span-4 mb-6 lg:mb-0">
+                                <p class="text-xs font-bold uppercase tracking-widest">Utopia Goods</p>
+                                <p class="text-[10px] font-mono-custom text-neutral-400 mt-1">SYDNEY | 2023 — 2024</p>
+                            </div>
+                            <div class="lg:col-span-5 space-y-4">
+                                <p class="text-lg font-medium leading-snug">Managed weekly campaign execution for 8,500+ subscribers.</p>
+                                <p class="text-sm font-mono-custom text-neutral-500 leading-relaxed">Built the highest-performing email campaign in the account's history, generating $14,957 in orders from a single send.</p>
+                            </div>
+                            <div class="lg:col-span-3 lg:text-right mt-6 lg:mt-0 flex lg:flex-col justify-end gap-2">
+                                <span class="tag-bubble border-black">KLAVIYO</span>
+                                <span class="tag-bubble border-black">SHOPIFY</span>
+                                <span class="tag-bubble border-black">QA</span>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 lg:grid-cols-12 border-b border-black py-12 group hover:bg-white transition-colors">
+                            <div class="lg:col-span-4 mb-6 lg:mb-0">
+                                <p class="text-xs font-bold uppercase tracking-widest">Freelance Designer</p>
+                                <p class="text-[10px] font-mono-custom text-neutral-400 mt-1">REMOTE | 2023 — 2026</p>
+                            </div>
+                            <div class="lg:col-span-5 space-y-4">
+                                <p class="text-lg font-medium leading-snug">Designed campaign assets for 100+ US-based clothing brands.</p>
+                                <p class="text-sm font-mono-custom text-neutral-500 leading-relaxed">Reached ~1.5M monthly Pinterest views through search-style optimisation of visual titles and metadata.</p>
+                            </div>
+                            <div class="lg:col-span-3 lg:text-right mt-6 lg:mt-0 flex lg:flex-col justify-end gap-2">
+                                <span class="tag-bubble border-black">ADOBE CC</span>
+                                <span class="tag-bubble border-black">SEO OPTIM</span>
+                                <span class="tag-bubble border-black">GROWTH</span>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 lg:grid-cols-12 border-b border-black py-12 group hover:bg-white transition-colors">
+                            <div class="lg:col-span-4 mb-6 lg:mb-0">
+                                <p class="text-xs font-bold uppercase tracking-widest">Self-Employed POD</p>
+                                <p class="text-[10px] font-mono-custom text-neutral-400 mt-1">SYDNEY | 2022 — 2023</p>
+                            </div>
+                            <div class="lg:col-span-5 space-y-4">
+                                <p class="text-lg font-medium leading-snug">Operated print-on-demand streetwear store with $60k revenue.</p>
+                                <p class="text-sm font-mono-custom text-neutral-500 leading-relaxed">Achieved 1,000+ organic sales with $0 paid ad spend via SEO-focused listing structures and visual storytelling.</p>
+                            </div>
+                            <div class="lg:col-span-3 lg:text-right mt-6 lg:mt-0 flex lg:flex-col justify-end gap-2">
+                                <span class="tag-bubble border-black">ECOMMERCE</span>
+                                <span class="tag-bubble border-black">BOOTSTRAP</span>
+                                <span class="tag-bubble border-black">30% MARGIN</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
             <section id="studio" class="px-6 py-24 sm:px-12 border-t border-black scroll-mt-20">
                 <div class="max-w-6xl mx-auto py-20 text-center">
                     <h2 class="text-3xl font-bold uppercase tracking-[0.4em] text-black/20">Studio Space</h2>
@@ -394,6 +654,7 @@
         </main>
     </div>
 
+    <!-- Case Study Page (Static logic remains the same) -->
     <div id="case-study-page" class="page-transition hidden-page fixed inset-0 z-50 bg-white overflow-y-auto">
         <nav class="sticky top-0 z-50 p-6 bg-white/80 backdrop-blur-md border-b border-black flex justify-between items-center">
             <button onclick="hideCaseStudy()" class="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest hover:translate-x-[-4px] transition-transform">
@@ -470,10 +731,10 @@
 
                             <div id="ig-aspect-container" class="relative overflow-hidden group aspect-square">
                                 <div id="ig-carousel" class="ig-carousel-inner h-full"></div>
-                                <button onclick="prevIgSlide()" class="absolute left-2 top-1/2 -translate-y-1/2 p-2 bg-white/80 border border-black opacity-0 group-hover:opacity-100 transition-opacity">
+                                <button onclick="prevIgSlide()" class="absolute left-2 top-1/2 -translate-y-1/2 p-2 bg-white/80 border border-black transition-opacity">
                                     <i data-lucide="chevron-left" class="w-4 h-4"></i>
                                 </button>
-                                <button onclick="nextIgSlide()" class="absolute right-2 top-1/2 -translate-y-1/2 p-2 bg-white/80 border border-black opacity-0 group-hover:opacity-100 transition-opacity">
+                                <button onclick="nextIgSlide()" class="absolute right-2 top-1/2 -translate-y-1/2 p-2 bg-white/80 border border-black transition-opacity">
                                     <i data-lucide="chevron-right" class="w-4 h-4"></i>
                                 </button>
                                 <div class="absolute bottom-4 right-4 bg-black/60 text-white text-[8px] px-2 py-1 rounded-full font-bold" id="ig-counter">1/7</div>
@@ -747,7 +1008,7 @@
                 focus: "Art Direction / Asset Production",
                 processTitle: "The Concept",
                 resultTitle: "The Execution",
-                brief: "The goal for this concept was to create a full EDM and product release campaign asset-pack/photoshoot with almost no material. I took mid-quality photos from Grailed (reselling marketplace) of the Vagillionaire II and turned them into high-end editorial assets. I wanted to push my design skills to recreate the brand's specific dark-luxe aesthetic from simple references.",
+                brief: "The goal for this concept was to create a full EDM and product release campaign asset-pack/photoshoot with almost no material. I took mid-quality photos from Grailed (reselling marketplace) of the Vagillionaire II—my personal favorite Chrome Hearts glasses—and turned them into high-end editorial assets. I wanted to push my design skills by recreating the brand's specific dark-luxe aesthetic using only simple references.",
                 solution: "I produced a set of high-impact visuals, including campaign-ready lifestyle shots and studio-quality product frames. The result is a cohesive collection of marketing material that stays true to the iconic brand identity – made from very little source material.",
                 isCollageHero: true,
                 heroCollage: [
@@ -778,12 +1039,19 @@
                     "https://i.imgur.com/lfrPxNz.jpeg", "https://i.imgur.com/ysjlHpq.jpeg", "https://i.imgur.com/ygWN2nB.jpeg"
                 ],
                 campaignCollage: [
-                    "https://images.unsplash.com/photo-1492691523567-6112564a7343?w=800&q=80",
-                    "https://images.unsplash.com/photo-1512436991641-6745cdb1723f?w=800&q=80",
-                    "https://images.unsplash.com/photo-1513364776144-60967b0f800f?w=800&q=80",
-                    "https://images.unsplash.com/photo-1509631179647-0177331693ae?w=800&q=80",
-                    "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=800&q=80",
-                    "https://images.unsplash.com/photo-1445205170230-053b83016050?w=800&q=80"
+                    "https://i.imgur.com/RbCSQNv.png",
+                    "https://i.imgur.com/xLADyPJ.jpeg",
+                    "https://i.imgur.com/Ll1nEEx.jpeg",
+                    "https://i.imgur.com/yVRd8bL.jpeg",
+                    "https://i.imgur.com/9frRN0E.jpeg",
+                    "https://i.imgur.com/Fm6IPVw.jpeg",
+                    "https://i.imgur.com/7FZLMCy.jpeg",
+                    "https://i.imgur.com/wDbxBt4.png",
+                    "https://i.imgur.com/LElqZmE.jpeg",
+                    "https://i.imgur.com/UDiseuj.jpeg",
+                    "https://i.imgur.com/jDn69zO.jpeg",
+                    "https://i.imgur.com/VBKJHb1.jpeg",
+                    "https://i.imgur.com/qF6Sqqd.jpeg"
                 ],
                 assets: {
                     title: "STUDIO CONTENT MADE WITH AI",
@@ -876,6 +1144,21 @@
             const userCaption = document.getElementById('ig-username-caption');
             const profilePic = document.getElementById('ig-profile-pic');
 
+            // Reset all optional sections to hidden / empty first to prevent bleeding
+            const optionalSections = [
+                'cs-fidelity-showcase', 'cs-assets-container', 'cs-timeline-container', 
+                'cs-campaign-section', 'cs-moodboard-section', 'cs-edm-section',
+                'cs-support-image-container', 'cs-outcome-image-container'
+            ];
+            optionalSections.forEach(secId => {
+                const el = document.getElementById(secId);
+                if(el) el.classList.add('hidden');
+            });
+            // Clear fidelity images to prevent ghosting
+            document.getElementById('cs-fidelity-main').src = "";
+            document.getElementById('cs-fidelity-detail').src = "";
+
+
             if (data.showSocial && data.socialGallery) {
                 totalIgSlides = data.socialGallery.length;
                 carousel.innerHTML = data.socialGallery.map(url => `<img src="${url}" class="ig-slide object-cover h-full">`).join('');
@@ -932,7 +1215,7 @@
             edmBadge.className = "px-2 py-1 bg-black text-white text-[8px] font-black uppercase";
             timelineTitle.className = "text-xs font-black uppercase tracking-[0.3em] text-neutral-900 mb-8";
             timelineTitle.innerText = "Production Pipeline";
-            moodboardBadge.classList.remove('hidden');
+            if(moodboardBadge) moodboardBadge.classList.remove('hidden');
 
             const heroContainer = document.getElementById('cs-hero-container');
             if (data.isCollageHero && data.heroCollage) {
@@ -968,7 +1251,7 @@
                 assetsTitle.className = "text-2xl font-black uppercase tracking-[0.1em] text-neutral-900";
                 edmTitleLabel.className = "text-2xl font-bold uppercase tracking-[0.2em] text-neutral-900";
                 edmBadge.className = "hidden";
-                moodboardBadge.classList.add('hidden');
+                if(moodboardBadge) moodboardBadge.classList.add('hidden');
                 
                 // Chrome Hearts Specific Order:
                 leftCol.appendChild(moodboardSection);
@@ -977,7 +1260,7 @@
                 
                 // Move Campaign Section to Bottom (Full Width)
                 gridLayout.after(campaignSection);
-                campaignSection.className = "mb-24 space-y-8 w-full"; // Ensure full width
+                campaignSection.className = "mb-24 w-full"; // Ensure full width
                 
                 // Hide Fidelity and Timeline for Chrome Hearts
                 fidelityShowcase.classList.add('hidden');
@@ -985,23 +1268,49 @@
                 
                 campaignSection.classList.remove('hidden');
                 campaignCollage.innerHTML = `
-                    <div class="col-span-12 md:col-span-7 border border-black bg-neutral-100 aspect-video md:aspect-[4/3] overflow-hidden cursor-pointer" onclick="openAssetPreview(caseStudies['${id}'].campaignCollage, 0)">
-                        <img src="${data.campaignCollage[0]}" class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700">
+                    <div class="col-span-12 md:col-span-7 border border-black bg-neutral-100 aspect-video md:aspect-[4/3] overflow-hidden cursor-pointer group" onclick="openAssetPreview(caseStudies['${id}'].campaignCollage, 0)">
+                        <img src="${data.campaignCollage[0]}" class="w-full h-full object-cover transition-all duration-700">
                     </div>
-                    <div class="col-span-6 md:col-span-5 border border-black bg-neutral-100 aspect-square overflow-hidden cursor-pointer" onclick="openAssetPreview(caseStudies['${id}'].campaignCollage, 1)">
-                        <img src="${data.campaignCollage[1]}" class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700">
+                    <div class="col-span-6 md:col-span-5 border border-black bg-neutral-100 aspect-square overflow-hidden cursor-pointer group" onclick="openAssetPreview(caseStudies['${id}'].campaignCollage, 1)">
+                        <img src="${data.campaignCollage[1]}" class="w-full h-full object-cover transition-all duration-700">
                     </div>
-                    <div class="col-span-6 md:col-span-4 border border-black bg-neutral-100 aspect-[3/4] overflow-hidden cursor-pointer" onclick="openAssetPreview(caseStudies['${id}'].campaignCollage, 2)">
-                        <img src="${data.campaignCollage[2]}" class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700">
+                    <div class="col-span-6 md:col-span-4 border border-black bg-neutral-100 aspect-[3/4] overflow-hidden cursor-pointer group" onclick="openAssetPreview(caseStudies['${id}'].campaignCollage, 2)">
+                        <img src="${data.campaignCollage[2]}" class="w-full h-full object-cover transition-all duration-700">
                     </div>
-                    <div class="col-span-12 md:col-span-8 border border-black bg-neutral-100 aspect-video overflow-hidden cursor-pointer" onclick="openAssetPreview(caseStudies['${id}'].campaignCollage, 3)">
-                        <img src="${data.campaignCollage[3]}" class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700">
+                    <div class="col-span-12 md:col-span-8 border border-black bg-neutral-100 aspect-video overflow-hidden cursor-pointer group" onclick="openAssetPreview(caseStudies['${id}'].campaignCollage, 3)">
+                        <img src="${data.campaignCollage[3]}" class="w-full h-full object-cover transition-all duration-700">
                     </div>
-                    <div class="col-span-6 border border-black bg-neutral-100 aspect-square overflow-hidden cursor-pointer" onclick="openAssetPreview(caseStudies['${id}'].campaignCollage, 4)">
-                        <img src="${data.campaignCollage[4]}" class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700">
+                    <div class="col-span-6 border border-black bg-neutral-100 aspect-square overflow-hidden cursor-pointer group" onclick="openAssetPreview(caseStudies['${id}'].campaignCollage, 4)">
+                        <img src="${data.campaignCollage[4]}" class="w-full h-full object-cover transition-all duration-700">
                     </div>
-                    <div class="col-span-6 border border-black bg-neutral-100 aspect-square overflow-hidden cursor-pointer" onclick="openAssetPreview(caseStudies['${id}'].campaignCollage, 5)">
-                        <img src="${data.campaignCollage[5]}" class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700">
+                    <div class="col-span-6 border border-black bg-neutral-100 aspect-square overflow-hidden cursor-pointer group" onclick="openAssetPreview(caseStudies['${id}'].campaignCollage, 5)">
+                        <img src="${data.campaignCollage[5]}" class="w-full h-full object-cover transition-all duration-700">
+                    </div>
+                    
+                    <!-- Expanded Grid for New Assets -->
+                    <div class="col-span-12 border border-black bg-neutral-100 aspect-video overflow-hidden cursor-pointer group" onclick="openAssetPreview(caseStudies['${id}'].campaignCollage, 6)">
+                        <img src="${data.campaignCollage[6]}" class="w-full h-full object-cover transition-all duration-700">
+                    </div>
+                    
+                    <div class="col-span-6 md:col-span-5 border border-black bg-neutral-100 aspect-[4/5] overflow-hidden cursor-pointer group" onclick="openAssetPreview(caseStudies['${id}'].campaignCollage, 7)">
+                        <img src="${data.campaignCollage[7]}" class="w-full h-full object-cover transition-all duration-700">
+                    </div>
+                    <div class="col-span-6 md:col-span-7 border border-black bg-neutral-100 aspect-[4/3] overflow-hidden cursor-pointer group" onclick="openAssetPreview(caseStudies['${id}'].campaignCollage, 8)">
+                        <img src="${data.campaignCollage[8]}" class="w-full h-full object-cover transition-all duration-700">
+                    </div>
+
+                    <div class="col-span-6 border border-black bg-neutral-100 aspect-square overflow-hidden cursor-pointer group" onclick="openAssetPreview(caseStudies['${id}'].campaignCollage, 9)">
+                        <img src="${data.campaignCollage[9]}" class="w-full h-full object-cover transition-all duration-700">
+                    </div>
+                    <div class="col-span-6 border border-black bg-neutral-100 aspect-square overflow-hidden cursor-pointer group" onclick="openAssetPreview(caseStudies['${id}'].campaignCollage, 10)">
+                        <img src="${data.campaignCollage[10]}" class="w-full h-full object-cover transition-all duration-700">
+                    </div>
+
+                    <div class="col-span-12 md:col-span-8 border border-black bg-neutral-100 aspect-video overflow-hidden cursor-pointer group" onclick="openAssetPreview(caseStudies['${id}'].campaignCollage, 11)">
+                        <img src="${data.campaignCollage[11]}" class="w-full h-full object-cover transition-all duration-700">
+                    </div>
+                    <div class="col-span-12 md:col-span-4 border border-black bg-neutral-100 aspect-square overflow-hidden cursor-pointer group" onclick="openAssetPreview(caseStudies['${id}'].campaignCollage, 12)">
+                        <img src="${data.campaignCollage[12]}" class="w-full h-full object-cover transition-all duration-700">
                     </div>
                 `;
 
@@ -1012,12 +1321,21 @@
                 moodboardTitle.innerText = "Visual Moodboard";
                 campaignSection.classList.add('hidden');
                 campaignSection.className = "hidden mb-24 space-y-8"; // Reset
+                campaignCollage.className = "grid grid-cols-12 gap-4"; // Reset to grid
                 
                 // Reset positions for other projects
                 leftCol.appendChild(assetsContainer);
                 rightCol.insertBefore(moodboardSection, document.getElementById('cs-outcomes-container'));
                 rightCol.insertBefore(edmSection, document.getElementById('cs-outcomes-container'));
-                rightCol.appendChild(fidelityShowcase);
+                
+                if (data.fidelity) {
+                    fidelityShowcase.classList.remove('hidden');
+                    document.getElementById('cs-fidelity-main').src = data.fidelity.main;
+                    document.getElementById('cs-fidelity-detail').src = data.fidelity.zoom;
+                    rightCol.appendChild(fidelityShowcase);
+                } else {
+                    fidelityShowcase.classList.add('hidden');
+                }
                 
                 edmGrid.className = "grid grid-cols-1 md:grid-cols-2 gap-8";
                 assetsGrid.className = "grid grid-cols-2 gap-3 mb-12";
@@ -1045,7 +1363,7 @@
                     moodboardDesc.innerText = data.moodboardDesc;
                     moodboardDesc.classList.remove('hidden');
                 }
-                moodboardGrid.innerHTML = data.moodboard.map((url, index) => `<div class="mb-4 break-inside-avoid border border-black overflow-hidden bg-neutral-100 group/mood inline-block w-full cursor-pointer" onclick="openAssetPreview(caseStudies['${id}'].moodboard, ${index})"><img src="${url}" class="w-full h-auto block transition-all duration-700 hover:scale-105" loading="lazy"></div>`).join('');
+                moodboardGrid.innerHTML = data.moodboard.map((url, index) => `<div class="mb-4 break-inside-avoid border border-black overflow-hidden bg-neutral-100 group/mood inline-block w-full cursor-pointer" onclick="openAssetPreview(caseStudies['${id}'].moodboard, index)"><img src="${url}" class="w-full h-auto block transition-all duration-700 hover:scale-105" loading="lazy"></div>`).join('');
             } else { moodboardSection.classList.add('hidden'); }
 
             document.getElementById('cs-pub-brief-section').classList.toggle('hidden', !data.showPubBrief);
@@ -1053,21 +1371,21 @@
             if (data.supportImg) {
                 document.getElementById('cs-support-image-container').classList.remove('hidden');
                 document.getElementById('cs-support-img').src = data.supportImg;
+            } else {
+                document.getElementById('cs-support-image-container').classList.add('hidden');
             }
             if (data.outcomeImg) {
                 document.getElementById('cs-outcome-image-container').classList.remove('hidden');
                 document.getElementById('cs-outcome-img').src = data.outcomeImg;
-            }
-
-            if (data.fidelity) {
-                if (id !== 'chrome_hearts') fidelityShowcase.classList.remove('hidden');
-                document.getElementById('cs-fidelity-main').src = data.fidelity.main;
-                document.getElementById('cs-fidelity-detail').src = data.fidelity.zoom;
+            } else {
+                document.getElementById('cs-outcome-image-container').classList.add('hidden');
             }
 
             if (data.assets) {
                 assetsContainer.classList.remove('hidden');
-                assetsGrid.innerHTML = data.assets.items.map((asset, index) => `<div class="group relative ${id === 'chrome_hearts' && index === 0 ? 'col-span-2 aspect-video' : 'aspect-square'} border border-black overflow-hidden bg-neutral-100 cursor-pointer" onclick="openAssetPreview(caseStudies['${id}'].assets.items, ${index})"><img src="${asset.url}" class="w-full h-full object-cover"></div>`).join('');
+                assetsGrid.innerHTML = data.assets.items.map((asset, index) => `<div class="group relative ${id === 'chrome_hearts' && index === 0 ? 'col-span-2 aspect-video' : 'aspect-square'} border border-black overflow-hidden bg-neutral-100 cursor-pointer" onclick="openAssetPreview(caseStudies['${id}'].assets.items, index)"><img src="${asset.url}" class="w-full h-full object-cover"></div>`).join('');
+            } else {
+                assetsContainer.classList.add('hidden');
             }
 
             const timelineList = document.getElementById('cs-timeline-list');
@@ -1078,7 +1396,7 @@
                     return html;
                 }).join('');
             } else { 
-                if (id !== 'chrome_hearts') document.getElementById('cs-timeline-container').classList.add('hidden'); 
+               document.getElementById('cs-timeline-container').classList.add('hidden'); 
             }
 
             const outcomesList = document.getElementById('cs-outcomes-list');
@@ -1089,8 +1407,11 @@
                 document.getElementById('cs-outcomes-container').classList.add('hidden');
             }
 
-            if (data.gallery) {
+            if (data.gallery && data.gallery.length > 0) {
+                document.getElementById('cs-gallery').classList.remove('hidden');
                 document.getElementById('cs-gallery').innerHTML = data.gallery.map(imgObj => `<div class="border border-black overflow-hidden bg-neutral-100 transition-all duration-700 ${imgObj.style}"><img src="${imgObj.url}" class="w-full h-full object-cover"></div>`).join('');
+            } else {
+                document.getElementById('cs-gallery').classList.add('hidden');
             }
 
             const home = document.getElementById('home-page');
