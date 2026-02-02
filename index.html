@@ -365,10 +365,11 @@
             content: '';
             position: absolute;
             left: 0;
-            top: 0.6em;
-            width: 5px;
-            height: 1px;
+            top: 0.65em;
+            width: 4px;
+            height: 4px;
             background: #000; /* Consistent black */
+            border-radius: 50%; /* Changed to dot point */
         }
     </style>
 </head>
@@ -406,7 +407,6 @@
                 <nav class="hidden sm:flex gap-10 text-[10px] font-bold text-neutral-400 uppercase tracking-[0.3em]">
                     <button onclick="navToSection('about')" class="hover:text-black transition-colors uppercase">about</button>
                     <button onclick="navToSection('work')" class="hover:text-black transition-colors uppercase">work</button>
-                    <button onclick="navToSection('tenure')" class="hover:text-black transition-colors uppercase">tenure</button>
                     <a href="mailto:henryslorach@gmail.com" class="hover:text-black transition-colors uppercase">contact</a>
                 </nav>
             </div>
@@ -432,14 +432,14 @@
 
         <main id="main-content" class="relative z-20 bg-white">
             
-            <!-- REDESIGNED HERO SECTION -->
+            <!-- ABOUT SECTION -->
             <section id="about" class="hero-section px-6 sm:px-12 border-t border-black scroll-mt-20">
                 <div class="max-w-6xl mx-auto hero-grid">
                     
                     <!-- Left Sidebar -->
                     <aside class="hero-sidebar">
                         <div class="hero-image-wrapper">
-                            <img src="https://i.imgur.com/Knm26si.jpeg" alt="Henry Slorach Portrait" class="w-full h-full object-cover object-[50%_20%]">
+                            <img src="https://i.imgur.com/E5bY6L3.png" alt="Henry Slorach Portrait" class="w-full h-full object-cover">
                         </div>
                         <a href="mailto:henryslorach@gmail.com" class="hero-cta">
                             <div class="flex items-center gap-3">
@@ -449,7 +449,7 @@
                             <i data-lucide="arrow-up-right" class="w-4 h-4"></i>
                         </a>
                         
-                        <!-- New Tools Block -->
+                        <!-- Tools Block -->
                         <div class="hero-tools-container">
                             <h4 class="hero-tools-heading">TOOLS/SKILLS</h4>
                             <div class="hero-tools-chips">
@@ -473,7 +473,7 @@
 
                     <!-- Right Main Content -->
                     <div class="hero-main">
-                        <span class="hero-meta">POSITIONING — 01</span>
+                        <div class="inline-block px-3 py-1 border border-black text-[10px] font-bold uppercase tracking-widest text-black mb-6 w-fit">ABOUT — 01</div>
                         <h2 class="hero-headline">ECOMMERCE CREATIVE + GROWTH</h2>
                         <p class="hero-paragraph">
                             I run the creative and site updates that keep ecommerce brands moving. Shopify edits, clean on-page SEO, and content that matches the brand voice. From Instagram posts to Meta ads and EDMs, I build a consistent look across the full funnel.
@@ -485,6 +485,7 @@
                                 <h3 class="hero-list-title">WHAT I MAKE AND MANAGE</h3>
                                 <ul class="hero-list-ul">
                                     <li class="hero-list-item">Website builds and conversion-focused landing pages</li>
+                                    <li class="hero-list-item">Shopify updates (pages, collections, banners)</li>
                                     <li class="hero-list-item">SEO clean-up and blog optimisation</li>
                                     <li class="hero-list-item">Instagram content and story assets</li>
                                     <li class="hero-list-item">Meta ads and EDM campaign creative</li>
@@ -506,141 +507,107 @@
                 </div>
             </section>
 
+            <!-- CASE STUDIES SECTION -->
             <section id="work" class="px-6 py-24 sm:px-12 border-t border-black scroll-mt-20">
-                <div class="max-w-6xl mx-auto space-y-24">
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-0 border border-black group">
-                        <div class="p-8 md:p-16 space-y-8 border-b lg:border-b-0 lg:border-r border-black flex flex-col justify-center">
-                            <div class="space-y-2">
-                                <p class="text-[10px] font-bold text-neutral-400 uppercase tracking-widest font-mono-custom">NOV 2023 — JAN 2024</p>
-                                <h3 class="text-4xl md:text-5xl font-semibold tracking-tighter uppercase">Utopia Goods</h3>
-                            </div>
-                            <p class="text-neutral-500 font-mono-custom">Heritage textile digital ecosystems and automated production.</p>
-                            <div class="pt-4">
-                                <div class="flex flex-wrap gap-1 mb-6">
-                                    <span class="tag-bubble">EDM SYSTEMS</span>
-                                    <span class="tag-bubble">WEAVY ENGINE</span>
-                                    <span class="tag-bubble">BRAND STORY</span>
-                                </div>
-                                <button onclick="showCaseStudy('aura')" class="inline-flex items-center w-fit gap-4 px-6 py-3 bg-black text-white text-[10px] font-bold uppercase tracking-widest hover:bg-neutral-800 transition-colors">
-                                    View Case <i data-lucide="arrow-right" class="w-4 h-4"></i>
-                                </button>
-                            </div>
+                <div class="max-w-6xl mx-auto">
+                    <!-- Case Studies Title Section -->
+                    <div class="flex flex-col md:flex-row justify-between items-start mb-20 gap-8">
+                        <div class="space-y-4">
+                            <div class="inline-block px-3 py-1 border border-black text-[10px] font-bold uppercase tracking-widest text-black">PROJECTS — 02</div>
+                            <h2 class="text-5xl md:text-7xl font-semibold tracking-tighter uppercase leading-[0.9]">Selected Work</h2>
                         </div>
-                        <div class="overflow-hidden bg-neutral-100">
-                            <img src="https://i.imgur.com/gwBrqKN.png" alt="Utopia Goods" class="w-full h-full object-cover aspect-square">
-                        </div>
+                        <p class="text-sm font-mono-custom text-neutral-500 max-w-xs border-l border-black pl-4">
+                            A showcase of digital ecosystems, automated content pipelines, and brand art direction.
+                        </p>
                     </div>
 
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-0 border border-black group">
-                        <div class="overflow-hidden bg-neutral-100 order-2 lg:order-1">
-                            <img src="https://i.imgur.com/9frRN0E.jpeg" alt="Chrome Hearts Concept" class="w-full h-full object-cover aspect-square">
-                        </div>
-                        <div class="p-8 md:p-16 space-y-8 border-b lg:border-b-0 order-1 lg:order-2 flex flex-col justify-center">
-                            <div class="space-y-3">
-                                <p class="text-[10px] font-bold text-neutral-400 uppercase tracking-widest font-mono-custom">CONCEPT — 2025</p>
-                                <h3 class="text-4xl md:text-5xl font-semibold tracking-tighter uppercase">Chrome Hearts</h3>
-                                <p class="text-sm font-bold uppercase tracking-widest text-neutral-900 font-mono-custom">Content Art Direction</p>
-                            </div>
-                            <p class="text-neutral-500 font-mono-custom">A speculative content pipeline demonstrating how AI and advanced editing can scale luxury production from existing marketplace photos.</p>
-                            <div class="pt-4">
-                                <div class="flex flex-wrap gap-1 mb-6">
-                                    <span class="tag-bubble">AI ART DIRECTION</span>
-                                    <span class="tag-bubble">CONTENT SCALING</span>
+                    <div class="space-y-24">
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-0 border border-black group">
+                            <div class="p-8 md:p-16 space-y-8 border-b lg:border-b-0 lg:border-r border-black flex flex-col justify-center">
+                                <div class="space-y-2">
+                                    <p class="text-[10px] font-bold text-neutral-400 uppercase tracking-widest font-mono-custom">NOV 2023 — JAN 2024</p>
+                                    <h3 class="text-4xl md:text-5xl font-semibold tracking-tighter uppercase">Utopia Goods</h3>
                                 </div>
-                                <button onclick="showCaseStudy('chrome_hearts')" class="inline-flex items-center w-fit gap-4 px-6 py-3 bg-black text-white text-[10px] font-bold uppercase tracking-widest hover:bg-neutral-800 transition-colors">
-                                    View Concept <i data-lucide="arrow-right" class="w-4 h-4"></i>
-                                </button>
+                                <p class="text-neutral-500 font-mono-custom">Heritage textile digital ecosystems and automated production.</p>
+                                <div class="pt-4">
+                                    <div class="flex flex-wrap gap-1 mb-6">
+                                        <span class="tag-bubble">EDM SYSTEMS</span>
+                                        <span class="tag-bubble">WEAVY ENGINE</span>
+                                        <span class="tag-bubble">BRAND STORY</span>
+                                    </div>
+                                    <button onclick="showCaseStudy('aura')" class="inline-flex items-center w-fit gap-4 px-6 py-3 bg-black text-white text-[10px] font-bold uppercase tracking-widest hover:bg-neutral-800 transition-colors">
+                                        View Case <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="overflow-hidden bg-neutral-100">
+                                <img src="https://i.imgur.com/gwBrqKN.png" alt="Utopia Goods" class="w-full h-full object-cover aspect-square">
                             </div>
                         </div>
-                    </div>
 
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-0 border border-black group">
-                        <div class="p-8 md:p-16 space-y-8 border-b lg:border-b-0 lg:border-r border-black flex flex-col justify-center">
-                            <div class="space-y-3">
-                                <p class="text-[10px] font-bold text-neutral-400 uppercase tracking-widest font-mono-custom">JAN 2025 — PROJECT</p>
-                                <h3 class="text-4xl md:text-5xl font-semibold tracking-tighter uppercase">Crude Routes</h3>
-                                <p class="text-sm font-bold uppercase tracking-widest text-neutral-900 font-mono-custom">Hybrid Supply Chains</p>
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-0 border border-black group">
+                            <div class="overflow-hidden bg-neutral-100 order-2 lg:order-1">
+                                <img src="https://i.imgur.com/9frRN0E.jpeg" alt="Chrome Hearts Concept" class="w-full h-full object-cover aspect-square">
                             </div>
-                            <p class="text-neutral-500 font-mono-custom">Merging direct industrial manufacturing with AI synthesis to build a brand at lightning speed.</p>
-                            <div class="pt-4">
-                                <div class="flex flex-wrap gap-1 mb-6">
-                                    <span class="tag-bubble">ALIBABA MFG</span>
-                                    <span class="tag-bubble">PHOTOSHOP</span>
-                                    <span class="tag-bubble">ILLUSTRATOR</span>
-                                    <span class="tag-bubble">AI CAMPAIGN</span>
+                            <div class="p-8 md:p-16 space-y-8 border-b lg:border-b-0 order-1 lg:order-2 flex flex-col justify-center">
+                                <div class="space-y-3">
+                                    <p class="text-[10px] font-bold text-neutral-400 uppercase tracking-widest font-mono-custom">CONCEPT — 2025</p>
+                                    <h3 class="text-4xl md:text-5xl font-semibold tracking-tighter uppercase">Chrome Hearts</h3>
+                                    <p class="text-sm font-bold uppercase tracking-widest text-neutral-900 font-mono-custom">Content Art Direction</p>
                                 </div>
-                                <button onclick="showCaseStudy('lumina')" class="inline-flex items-center w-fit gap-4 px-6 py-3 bg-black text-white text-[10px] font-bold uppercase tracking-widest hover:bg-neutral-800 transition-colors">
-                                    View Project <i data-lucide="arrow-right" class="w-4 h-4"></i>
-                                </button>
+                                <p class="text-neutral-500 font-mono-custom">A speculative content pipeline demonstrating how AI and advanced editing can scale luxury production from existing marketplace photos.</p>
+                                <div class="pt-4">
+                                    <div class="flex flex-wrap gap-1 mb-6">
+                                        <span class="tag-bubble">AI ART DIRECTION</span>
+                                        <span class="tag-bubble">CONTENT SCALING</span>
+                                    </div>
+                                    <button onclick="showCaseStudy('chrome_hearts')" class="inline-flex items-center w-fit gap-4 px-6 py-3 bg-black text-white text-[10px] font-bold uppercase tracking-widest hover:bg-neutral-800 transition-colors">
+                                        View Concept <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                                    </button>
+                                </div>
                             </div>
                         </div>
-                        <div class="overflow-hidden bg-neutral-100">
-                            <img src="https://i.imgur.com/loZbRhd.jpeg" alt="Crude Routes" class="w-full h-full object-cover object-top aspect-square">
+
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-0 border border-black group">
+                            <div class="p-8 md:p-16 space-y-8 border-b lg:border-b-0 lg:border-r border-black flex flex-col justify-center">
+                                <div class="space-y-3">
+                                    <p class="text-[10px] font-bold text-neutral-400 uppercase tracking-widest font-mono-custom">JAN 2025 — PROJECT</p>
+                                    <h3 class="text-4xl md:text-5xl font-semibold tracking-tighter uppercase">Crude Routes</h3>
+                                    <p class="text-sm font-bold uppercase tracking-widest text-neutral-900 font-mono-custom">Hybrid Supply Chains</p>
+                                </div>
+                                <p class="text-neutral-500 font-mono-custom">Merging direct industrial manufacturing with AI synthesis to build a brand at lightning speed.</p>
+                                <div class="pt-4">
+                                    <div class="flex flex-wrap gap-1 mb-6">
+                                        <span class="tag-bubble">ALIBABA MFG</span>
+                                        <span class="tag-bubble">PHOTOSHOP</span>
+                                        <span class="tag-bubble">ILLUSTRATOR</span>
+                                        <span class="tag-bubble">AI CAMPAIGN</span>
+                                    </div>
+                                    <button onclick="showCaseStudy('lumina')" class="inline-flex items-center w-fit gap-4 px-6 py-3 bg-black text-white text-[10px] font-bold uppercase tracking-widest hover:bg-neutral-800 transition-colors">
+                                        View Project <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="overflow-hidden bg-neutral-100">
+                                <img src="https://i.imgur.com/loZbRhd.jpeg" alt="Crude Routes" class="w-full h-full object-cover object-top aspect-square">
+                            </div>
                         </div>
                     </div>
                 </div>
             </section>
 
-            <section id="tenure" class="px-6 py-24 sm:px-12 border-t border-black scroll-mt-20 bg-neutral-50">
-                <div class="max-w-6xl mx-auto">
-                    <div class="flex flex-col md:flex-row justify-between items-start mb-20 gap-8">
-                        <div class="space-y-4">
-                            <div class="inline-block px-3 py-1 border border-black text-[10px] font-bold uppercase tracking-widest text-black">Commerce Tenure — 02</div>
-                            <h2 class="text-5xl md:text-7xl font-semibold tracking-tighter uppercase leading-[0.9]">Selected Experience</h2>
-                        </div>
-                        <p class="text-sm font-mono-custom text-neutral-500 max-w-xs border-l border-black pl-4">
-                            Operational tenure across luxury textiles, freelance agency work, and self-built ecommerce ventures.
-                        </p>
+            <!-- CONTACT SECTION -->
+            <section id="contact" class="px-6 py-32 sm:px-12 border-t border-black bg-white scroll-mt-20">
+                <div class="max-w-6xl mx-auto text-center space-y-12">
+                    <div class="space-y-4">
+                        <div class="inline-block px-3 py-1 border border-black text-[10px] font-bold uppercase tracking-widest text-black">CONTACT — 03</div>
+                        <h2 class="text-6xl md:text-9xl font-semibold tracking-tighter uppercase leading-[0.9] block">Get in touch</h2>
                     </div>
-
-                    <div class="space-y-0 border-t border-black">
-                        <div class="grid grid-cols-1 lg:grid-cols-12 border-b border-black py-12 group hover:bg-white transition-colors">
-                            <div class="lg:col-span-4 mb-6 lg:mb-0">
-                                <p class="text-xs font-bold uppercase tracking-widest">Utopia Goods</p>
-                                <p class="text-[10px] font-mono-custom text-neutral-400 mt-1">SYDNEY | 2023 — 2024</p>
-                            </div>
-                            <div class="lg:col-span-5 space-y-4">
-                                <p class="text-lg font-medium leading-snug">Managed weekly campaign execution for 8,500+ subscribers.</p>
-                                <p class="text-sm font-mono-custom text-neutral-500 leading-relaxed">Built the highest-performing email campaign in the account's history, generating $14,957 in orders from a single send.</p>
-                            </div>
-                            <div class="lg:col-span-3 lg:text-right mt-6 lg:mt-0 flex lg:flex-col justify-end gap-2">
-                                <span class="tag-bubble border-black">KLAVIYO</span>
-                                <span class="tag-bubble border-black">SHOPIFY</span>
-                                <span class="tag-bubble border-black">QA</span>
-                            </div>
-                        </div>
-
-                        <div class="grid grid-cols-1 lg:grid-cols-12 border-b border-black py-12 group hover:bg-white transition-colors">
-                            <div class="lg:col-span-4 mb-6 lg:mb-0">
-                                <p class="text-xs font-bold uppercase tracking-widest">Freelance Designer</p>
-                                <p class="text-[10px] font-mono-custom text-neutral-400 mt-1">REMOTE | 2023 — 2026</p>
-                            </div>
-                            <div class="lg:col-span-5 space-y-4">
-                                <p class="text-lg font-medium leading-snug">Designed campaign assets for 100+ US-based clothing brands.</p>
-                                <p class="text-sm font-mono-custom text-neutral-500 leading-relaxed">Reached ~1.5M monthly Pinterest views through search-style optimisation of visual titles and metadata.</p>
-                            </div>
-                            <div class="lg:col-span-3 lg:text-right mt-6 lg:mt-0 flex lg:flex-col justify-end gap-2">
-                                <span class="tag-bubble border-black">ADOBE CC</span>
-                                <span class="tag-bubble border-black">SEO OPTIM</span>
-                                <span class="tag-bubble border-black">GROWTH</span>
-                            </div>
-                        </div>
-
-                        <div class="grid grid-cols-1 lg:grid-cols-12 border-b border-black py-12 group hover:bg-white transition-colors">
-                            <div class="lg:col-span-4 mb-6 lg:mb-0">
-                                <p class="text-xs font-bold uppercase tracking-widest">Self-Employed POD</p>
-                                <p class="text-[10px] font-mono-custom text-neutral-400 mt-1">SYDNEY | 2022 — 2023</p>
-                            </div>
-                            <div class="lg:col-span-5 space-y-4">
-                                <p class="text-lg font-medium leading-snug">Operated print-on-demand streetwear store with $60k revenue.</p>
-                                <p class="text-sm font-mono-custom text-neutral-500 leading-relaxed">Achieved 1,000+ organic sales with $0 paid ad spend via SEO-focused listing structures and visual storytelling.</p>
-                            </div>
-                            <div class="lg:col-span-3 lg:text-right mt-6 lg:mt-0 flex lg:flex-col justify-end gap-2">
-                                <span class="tag-bubble border-black">ECOMMERCE</span>
-                                <span class="tag-bubble border-black">BOOTSTRAP</span>
-                                <span class="tag-bubble border-black">30% MARGIN</span>
-                            </div>
-                        </div>
+                    <div class="pt-8">
+                        <a href="mailto:henryslorach@gmail.com" class="text-2xl md:text-5xl font-medium tracking-tight border-b-2 border-black pb-2 hover:bg-black hover:text-white transition-all duration-300 inline-block">
+                            henryslorach@gmail.com
+                        </a>
+                        <p class="mt-8 text-sm font-mono-custom text-neutral-400 uppercase tracking-[0.2em]">Based in Sydney, Australia — Available for freelance & projects.</p>
                     </div>
                 </div>
             </section>
@@ -696,7 +663,7 @@
 
                     <div id="cs-weavy-container" class="hidden space-y-6 pt-12 border-t border-black">
                         <h3 class="text-xl font-bold uppercase tracking-tight">The Weavy System</h3>
-                        <p class="text-sm font-mono-custom text-neutral-500">To avoid costly reshoots, I engineered the "Weavy" system—a workflow that digitally composites new pillow designs into existing lifestyle photography with perfect fabric tension.</p>
+                        <p id="cs-weavy-text" class="text-sm font-mono-custom text-neutral-500">Instead of reshooting every time a product changed, I built a workflow to swap new designs into existing lifestyle photos while keeping the fabric tension and lighting believable. It saved time, kept output consistent, and let us ship more content without extra production.</p>
                         <div class="border border-black aspect-video bg-neutral-900 flex items-center justify-center group relative cursor-pointer">
                             <div class="absolute inset-0 bg-neutral-100/10 group-hover:bg-neutral-100/20 transition-colors flex items-center justify-center">
                                 <i data-lucide="play" class="w-10 h-10 text-white opacity-80"></i>
@@ -779,7 +746,7 @@
                                 </div>
                                 <p class="text-xl font-medium leading-tight mb-4">"Technical Grit"</p>
                                 <p class="font-mono-custom text-sm text-neutral-500 leading-relaxed mb-6">
-                                    The visual direction for the campaign was centered on placing a highly technical, synthetic product into the grit and warmth of a traditional pub setting.
+                                    The visual idea was “technical product, real-world setting”. Clean, synthetic materials dropped into a traditional pub environment with warm light, dark corners, and a bit of grit. That contrast was the whole point: engineered and polished, but grounded and believable.
                                 </p>
                             </div>
                         </div>
@@ -911,8 +878,8 @@
                 year: "2025",
                 role: "Creative Lead",
                 focus: "Global Sourcing / Art Direction",
-                brief: "Developing high-end campaign assets by bridging the gap between offshore manufacturing and digital art direction. By integrating professional photo editing with AI, we created a premium visual ecosystem at a fraction of traditional production costs.",
-                solution: "A scalable art direction model that combines physical product sampling with AI-generated environments to launch brands faster.",
+                brief: "I built a content pipeline that bridges real product sampling with fast digital art direction. The idea was to take physical samples and turn them into a premium set of campaign assets without needing a full shoot every time. I used a mix of tight photo editing and AI generation so the output stayed consistent and looked high-end.",
+                solution: "A repeatable art direction workflow that combines real samples with AI-built environments to launch faster and produce more campaign content.",
                 hero: "https://i.imgur.com/loZbRhd.jpeg",
                 supportImg: "https://i.imgur.com/tVE1KMh.jpeg", 
                 outcomeImg: "https://i.imgur.com/wgpl6sq.jpeg",
@@ -935,8 +902,8 @@
                     { title: "Prototyping", desc: "Manufacturing Specs" }
                 ],
                 outcomes: [
-                    { title: "Visual Consistency", desc: "Matching physical samples to premium digital standards." },
-                    { title: "Scalable Content", desc: "Using AI to generate campaign assets in record time." }
+                    { title: "Visual Consistency", desc: "Matching the physical samples to a consistent “studio” standard across every asset." },
+                    { title: "Scalable Content", desc: "Generating campaign variations quickly, then finishing and QA-checking them so they’re actually usable." }
                 ],
                 gallery: [
                     { url: "https://i.imgur.com/J4denA0.jpeg", style: "aspect-[3/4]" },
@@ -951,21 +918,21 @@
                 year: "2023 — 2024",
                 role: "Digital Marketing Specialist",
                 focus: "CRM / Marketing Automation",
-                brief: `I led the digital transformation for Utopia Goods, a luxury textile brand, focusing on high-converting email marketing and automated customer journeys. By modernizing their communication architecture, we increased audience engagement and revenue while preserving the brand's legacy.
+                brief: `I took over email marketing and paid social creative for Utopia Goods and rebuilt how campaigns were planned and executed week to week. The focus was simple: keep the brand feeling premium while making the work more consistent, easier to run, and easier to improve.
                         <div class="mt-12 pt-12 border-t border-black space-y-6">
                             <h3 class="text-[11px] font-black uppercase tracking-[0.5em] text-neutral-900">Campaign Performance</h3>
                             <p class="text-sm font-mono-custom text-neutral-500 leading-relaxed">
-                                By implementing audience segmentation and story-first layouts, we achieved a conversion multiple <span class="text-black font-bold">3x higher</span> than the brand average.
+                                Small changes added up fast: tighter segmentation, stronger creative, and cleaner structure in each send. The goal was repeatable performance, not one-off wins.
                             </p>
                             <div class="border border-black bg-white overflow-hidden shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] w-full">
                                 <img src="https://i.imgur.com/IZmc2UH.png" alt="Performance Chart" class="w-full h-auto block">
                             </div>
                         </div>`,
-                solution: "Engineered a content-led marketing ecosystem that maintained luxury positioning while achieving record-breaking sales growth through automated funnels.",
+                solution: "A cleaner, more consistent campaign system that kept the brand’s luxury feel while driving stronger sales from email and paid social.",
                 hero: "https://i.imgur.com/54L5CJi.png",
                 showWeavy: true,
                 showSocial: true,
-                socialBrief: "Our most impactful campaigns utilized narrative-driven social content to deepen brand loyalty before moving to a direct sales approach.",
+                socialBrief: "The social content was built to warm people up before selling. It kept the brand story running in the background, then the campaigns did the conversion work.",
                 socialGallery: [
                     "https://i.imgur.com/KMJ1ZGe.jpeg",
                     "https://i.imgur.com/PEButCr.jpeg",
@@ -988,15 +955,20 @@
                 },
                 assets: {
                     title: "Product images to use in campaign",
-                    desc: "These are the base photos I used to build the campaign. I used the original studio shots of the pillows and composited them into the final scenes, ensuring the fabric details looked real without needing another location shoot for the specific pillows that lacked their own shots.",
+                    desc: "These were the base images I used to build the campaign. I pulled the strongest frames and turned them into a consistent set of assets across email, ads, and socials.",
                     items: [
                         { url: "https://i.imgur.com/7xEpRlx.png", label: "Front Profile" },
                         { url: "https://i.imgur.com/hZmLTFl.png", label: "Spec Detail" },
                         { url: "https://i.imgur.com/JSBRAOd.png", label: "Sample A" },
-                        { url: "https://i.imgur.com/HZvbGN3.png", label: "Sample B" }
+                        { url: "https://i.imgur.com/mnO8nMq.jpeg", label: "Sample B" }
                     ]
                 },
                 showEdm: true,
+                edmCustomLabels: {
+                    title: "DIGITAL COMMS STRATEGY",
+                    desc: "I designed and built the EDMs end to end, from layout and creative in Photoshop and Illustrator to setup, segmentation, and sends in Klaviyo. Each campaign was treated like a mini landing page: clear story, clear product focus, and a clean path to purchase.",
+                    badge: "3x Conversion Multiple"
+                },
                 edms: [
                     { url: "https://i.imgur.com/sww6Lvg.jpeg", aspect: "aspect-[1/2.2]", scrollable: true },
                     { url: "https://i.imgur.com/VGqKT7t.jpeg", aspect: "aspect-[1/2.2]", scrollable: true },
@@ -1004,7 +976,7 @@
                     { url: "https://i.imgur.com/uGmsdnp.jpeg", aspect: "aspect-[1/2.2]", scrollable: true }
                 ],
                 campaignTitle: "Campaign Rollout",
-                campaignDesc: "Extending the visual language across all digital touchpoints, ensuring a cohesive brand experience from social media to email marketing.",
+                campaignDesc: "Same visual language across every touchpoint. Social, ads, and email all felt like the same campaign, not separate pieces.",
                 campaignCollage: [
                     "https://i.imgur.com/ZZJoY8R.jpeg",
                     "https://i.imgur.com/5lZJjY8.jpeg",
@@ -1025,8 +997,8 @@
                 focus: "Art Direction / Asset Production",
                 processTitle: "The Concept",
                 resultTitle: "The Execution",
-                brief: "The goal for this concept was to create a full EDM and product release campaign asset-pack/photoshoot with almost no material. I took mid-quality photos from Grailed (reselling marketplace) of the Vagillionaire II—my personal favorite Chrome Hearts glasses—and turned them into high-end editorial assets. I wanted to push my design skills by recreating the brand's specific dark-luxe aesthetic using only simple references.",
-                solution: "I produced a set of high-impact visuals, including campaign-ready lifestyle shots and studio-quality product frames. The result is a cohesive collection of marketing material that stays true to the iconic brand identity – made from very little source material.",
+                brief: "I wanted to see how far I could push a full release campaign with almost no material. I started with mid-quality Grailedailed photos of the Vagillionaire II, pulled the strongest frames, and rebuilt them into a clean set of high-end assets. The goal was simple: match the brand’s dark-luxe feel using minimal references, then scale it into a full content pack.",
+                solution: "A full set of campaign visuals built from minimal source material, staying true to the Chrome Hearts aesthetic across studio frames, lifestyle shots, and rollout assets.",
                 isCollageHero: true,
                 heroCollage: [
                     "https://i.imgur.com/9frRN0E.jpeg",
@@ -1037,13 +1009,13 @@
                 showEdm: true,
                 edmCustomLabels: {
                     title: "EXAMPLE EDM CONCEPT BY ME",
-                    desc: "Using my EDM design skills and understanding of brand aesthetics, I created this concept to show how I can use professional design tools like <span class='text-black font-bold'>Photoshop</span> and <span class='text-black font-bold'>Illustrator</span> to build high-impact marketing materials.",
+                    desc: "I designed an EDM concept to show how I’d translate this aesthetic into email. Layout, typography, hierarchy, and image treatment were all built in Photoshop and Illustrator, keeping it sharp and consistent with the campaign visuals.",
                     badge: ""
                 },
                 edms: [
                     { url: "https://i.imgur.com/lGzYEss.jpeg", aspect: "aspect-[1/3.5]", scrollable: true, isLarge: true }
                 ],
-                moodboardDesc: "I analyzed authentic Chrome Hearts campaigns to extract the key visual cues required for my own creative execution.",
+                moodboardDesc: "I broke down real Chrome Hearts campaigns to isolate the repeatable cues: lighting, grain, framing, typography, and attitude. That moodboard became the rulebook for everything I made next.",
                 moodboard: [
                     "https://i.imgur.com/hO9WyN1.png", "https://i.imgur.com/yLc5jG7.png", "https://i.imgur.com/FapltVh.jpeg",
                     "https://i.imgur.com/dL6F6Ox.jpeg", "https://i.imgur.com/UteGY8A.jpeg", "https://i.imgur.com/MOqCNff.jpeg",
@@ -1068,7 +1040,7 @@
                 ],
                 assets: {
                     title: "STUDIO CONTENT MADE WITH AI",
-                    desc: "I sourced raw photography from <span class='text-black font-bold'>Grailed</span> (a popular reselling site), and then <span class='text-black font-bold'>regenerated</span> the images below to match the existing <span class='text-black font-bold'>Chrome Hearts studio aesthetic</span> showcased in my moodboard above.",
+                    desc: "I sourced the base photos from Grailed, then rebuilt and regenerated them into a consistent “studio” set that matches the reference moodboard. The focus here was fidelity: edges, lighting direction, materials, and the small brand details that usually get lost.",
                     items: [
                         { url: "https://i.imgur.com/8EyiSYA.jpeg", label: "Studio Hero: Content Scaling" },
                         { url: "https://i.imgur.com/3rWMmfJ.jpeg", label: "Detail Shot" },
@@ -1172,7 +1144,7 @@
             const optionalSections = [
                 'cs-fidelity-showcase', 'cs-assets-container', 'cs-timeline-container', 
                 'cs-campaign-section', 'cs-moodboard-section', 'cs-edm-section',
-                'cs-support-image-container', 'cs-outcome-image-container'
+                'cs-support-image-container', 'cs-outcome-image-container', 'cs-weavy-container'
             ];
             optionalSections.forEach(secId => {
                 const el = document.getElementById(secId);
@@ -1339,7 +1311,7 @@
 
                 if (id === 'chrome_hearts') {
                      document.getElementById('cs-campaign-title').innerText = "Step 2: Campaign Creation";
-                     document.getElementById('cs-campaign-desc').innerHTML = `Beyond product shots, I produced full campaign imagery using <span class="text-black font-bold">AI</span> to place the eyewear within high-fashion lifestyle contexts. These assets mirror the brand's iconic grit and attitude through complex model compositions.`;
+                     document.getElementById('cs-campaign-desc').innerHTML = `After the studio set, I pushed into lifestyle campaign imagery. Using AI as the starting point, I art-directed scenes that still felt like Chrome Hearts: gritty, editorial, and slightly confrontational. Then I cleaned and finished the outputs so they could sit inside a real campaign rollout.`;
                 } else {
                      document.getElementById('cs-campaign-title').innerText = data.campaignTitle || "Campaign Creation";
                      document.getElementById('cs-campaign-desc').innerHTML = data.campaignDesc || "";
@@ -1407,6 +1379,10 @@
                 if(data.edmCustomLabels) {
                     edmTitleLabel.innerText = data.edmCustomLabels.title;
                     document.getElementById('edm-desc-label').innerHTML = data.edmCustomLabels.desc;
+                    if(data.edmCustomLabels.badge !== undefined) {
+                        edmBadge.innerText = data.edmCustomLabels.badge;
+                        edmBadge.classList.toggle('hidden', data.edmCustomLabels.badge === "");
+                    }
                 }
                 const scrollerHeight = id === 'chrome_hearts' ? '1200px' : '600px';
                 edmGrid.innerHTML = data.edms.map(edm => `<div class="flex flex-col gap-3 w-full"><div class="embedded-edm-scroller" style="height: ${scrollerHeight};"><img src="${edm.url}" class="w-full h-auto block"></div></div>`).join('');
